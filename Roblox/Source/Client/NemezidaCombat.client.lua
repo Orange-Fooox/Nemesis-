@@ -26,6 +26,7 @@ local keyAbilities={
  [Enum.KeyCode.X]="ShadowDash",
  [Enum.KeyCode.C]="EarthRend",
  [Enum.KeyCode.V]="AbyssRelease",
+ [Enum.KeyCode.B]="Barrier",
 }
 UserInputService.InputBegan:Connect(function(input,processed)
  if processed then return end
@@ -36,6 +37,10 @@ UserInputService.InputBegan:Connect(function(input,processed)
  local ability=keyAbilities[input.KeyCode]
  if ability then
   local enemy=enemyFromTarget(mouse.Target)
-  if enemy then abilityRemote:FireServer(ability,enemy) end
+  if ability=="Barrier" or ability=="ShadowDash" then
+   abilityRemote:FireServer(ability,enemy)
+  elseif enemy then
+   abilityRemote:FireServer(ability,enemy)
+  end
  end
 end)
