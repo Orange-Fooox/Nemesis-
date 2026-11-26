@@ -22,6 +22,9 @@
 
 Подробности: [дорожная карта](docs/MILESTONES.md), [генерация](docs/PROCEDURAL_GENERATION.md), [система Немезиды](docs/NEMESIS_SYSTEM.md).
 
+## Исходники разработки
+Первые Luau-модули v0.4-dev.1 находятся в [Roblox/Source](Roblox/Source/README.md). Это кодовая основа, не готовая сборка Studio. Текущий список реализованного и незавершённого указан в [техническом статусе](docs/TECHNICAL_STATUS.md).
+
 ## Документы
 - [Game Bible](docs/GAME_BIBLE.md)
 - [Бестиарий](docs/BESTIARY.md)
