@@ -1,0 +1,144 @@
+NEMEZIDA: SEAL OF THE ABYSS
+STATIC CODE REVIEW
+Build: v0.4-dev.1
+Review date: 2026-11-26
+Repository: valik123f-collab/Nemesis-
+
+SCOPE
+Reviewed the current GitHub versions of:
+- Roblox/Source/Shared/NemezidaConfig.lua
+- Roblox/Source/Server/CombatService.lua
+- Roblox/Source/Server/EnemyAIService.lua
+- Roblox/Source/Server/HubGenerator.lua
+- Roblox/Source/Server/NemesisService.lua
+- Roblox/Source/Server/MovementService.lua
+- Roblox/Source/Server/Bootstrap.server.lua
+- Roblox/Source/Client/NemezidaCamera.client.lua
+- Roblox/Source/Client/NemezidaCombat.client.lua
+- Roblox/Source/Client/NemezidaMovement.client.lua
+- default.project.json
+- Roblox/BUILD_AND_TEST.md
+- Tests/ACCEPTANCE_TESTS_v0_4.md
+- README.md and docs/TECHNICAL_STATUS.md
+
+METHOD
+Static source review only. The repository files were read from GitHub and checked for
+logic, service wiring, remote validation, and consistency with the documented design.
+No Roblox Studio runtime, Luau compiler, Rojo CLI, or live multiplayer session was run.
+Therefore this report does NOT certify that the place launches or that scripts compile.
+
+RESULT
+Status: NOT READY FOR A VERIFIED PLAYTEST.
+The repository contains a useful development code base, but several implemented
+features are incomplete or have logic defects. The existing acceptance checklist
+also explicitly says the Studio test run has not yet been performed.
+
+FINDINGS
+
+[HIGH] AI can keep fighting after its provocation timer expires.
+File: Roblox/Source/Server/EnemyAIService.lua
+In update(), the target is cleared after ProvokedUntil only when the player is farther
+than AttackRange * 1.5. If the player remains close, the enemy can continue attacking
+after the provocation timer expires. This contradicts the documented return-to-home
+behavior.
+Suggested fix: when ProvokedUntil expires, clear s.target unconditionally (or use an
+explicit grace/leash policy), set AIState to Return, and move the NPC toward s.home.
+
+[HIGH] Ability names overstate what the code actually does.
+Files: NemezidaConfig.lua, CombatService.lua, NemezidaCombat.client.lua
+ShadowDash currently performs a damage hit only; it does not move the player.
+EarthRend is also a single target damage hit, not an area attack.
+The Barrier ability described in the project design is absent from Config.Abilities
+and has no input/server implementation.
+Suggested fix: implement the actual movement, area hit, and barrier mechanics, or
+rename/disable these abilities until their behavior exists.
+
+[HIGH] Nemesis adaptation is not connected to gameplay.
+File: Roblox/Source/Server/NemesisService.lua
+RecordAction() and RecordEncounter() are defined, but the reviewed combat and AI
+services do not call them. The service currently stores counters in memory only.
+No hunter spawning, combat adaptation, or persistence is wired into the game.
+Suggested fix: add server-side integration points for confirmed player actions and
+encounters, then implement persistence and the Nemesis event/spawn flow.
+
+[MEDIUM] Vulnerability bonus is written but never applied to damage.
+Files: CombatService.lua and EnemyAIService.lua
+AbyssRelease writes VulnerabilityBonus and VulnerableUntil attributes, but no reviewed
+damage calculation reads those attributes. The advertised +10% vulnerability effect
+therefore has no gameplay effect.
+Suggested fix: apply the vulnerability multiplier in the authoritative damage
+function while VulnerableUntil is active.
+
+[MEDIUM] Combat has no line-of-sight check.
+File: Roblox/Source/Server/CombatService.lua
+The server validates target tag and distance, but does not check whether walls or
+other geometry block the attack. A player may be able to damage an enemy through
+solid obstacles.
+Suggested fix: add a server raycast from the attacker to the target and reject hits
+blocked by world geometry.
+
+[MEDIUM] Sprint has no stamina or server-side request throttling.
+File: Roblox/Source/Server/MovementService.lua
+The server accepts repeated true/false sprint requests and sets speed to 23 without
+checking Stamina. The speed is capped, so this is not an arbitrary-speed exploit,
+but it bypasses the intended stamina system and permits unnecessary remote spam.
+Suggested fix: validate sprint state transitions, add a small request rate limit, and
+consume/regenerate Stamina on the server.
+
+[MEDIUM] Enemy attacks also lack line-of-sight validation.
+File: Roblox/Source/Server/EnemyAIService.lua
+The AI attacks based on distance only. It does not raycast to ensure that the player
+is visible and not behind a wall.
+Suggested fix: add server-side visibility checks before applying NPC damage.
+
+[LOW] Camera uses a fixed offset and captures CurrentCamera once.
+File: Roblox/Source/Client/NemezidaCamera.client.lua
+The camera follows the character using a fixed world-space offset. It is a basic
+angled follow camera, not a fully configurable isometric camera. If CurrentCamera
+is replaced, the captured reference may become stale.
+Suggested fix: refresh CurrentCamera when needed and consider a camera configuration
+for angle, zoom, smoothing, and collision.
+
+[LOW] Greybox hub is not a finished hub.
+File: Roblox/Source/Server/HubGenerator.lua
+The generator creates basic geometry, buildings, rubble, roads, and a spawn point.
+It does not create the designed NPC population, interactive objects, region systems,
+or final art assets. This matches the current documentation and is not a code defect,
+but it is important for release expectations.
+
+POSITIVE CHECKS
+- default.project.json maps the reviewed source files to a coherent Roblox hierarchy.
+- Bootstrap requires the expected server modules and starts the hub generator.
+- Combat RemoteEvents are created on the server.
+- Basic attacks and abilities validate enemy tags, player character health, distance,
+  cooldown, and Essence on the server.
+- Unknown ability names are rejected.
+- Enemy AI starts neutral and uses server-set provocation attributes.
+- Hub generation uses a seeded Random instance and replaces the previous generated
+  hub folder on regeneration.
+- Sprint speed is server-selected from two fixed values (16 or 23).
+- Documentation correctly states that Studio verification is still outstanding.
+
+NOT EXECUTED
+- Luau syntax/type analysis in Roblox Studio.
+- Rojo build/sync.
+- Play test in Roblox Studio.
+- Multiplayer test with two or more clients.
+- Runtime pathfinding, collision, respawn, and performance tests.
+- Automated test suite or CI result.
+
+RECOMMENDED FIX ORDER
+1. Fix AI provocation expiry and return behavior.
+2. Implement or rename the incomplete abilities; add the missing Barrier ability
+   only when its behavior is implemented.
+3. Wire NemesisService into combat/encounter events.
+4. Apply the AbyssRelease vulnerability modifier.
+5. Add line-of-sight checks to player and enemy attacks.
+6. Add server-side stamina handling and sprint request throttling.
+7. Run Rojo sync and the complete acceptance checklist in Roblox Studio.
+
+FINAL VERDICT
+The source code is suitable for continued development, but it is not yet verified as
+a working Roblox game. The findings above are based on static inspection of the
+current GitHub source. A successful Roblox Studio Play session is still required
+before marking v0.4-dev.1 as tested.
