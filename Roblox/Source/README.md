@@ -13,6 +13,7 @@ ServerScriptService:
 - Services/EnemyAIService (ModuleScript)
 - Services/HubGenerator (ModuleScript)
 - Services/NemesisService (ModuleScript)
+- Services/MovementService (ModuleScript)
 
 StarterPlayer/StarterPlayerScripts:
 - NemezidaCamera (LocalScript)
