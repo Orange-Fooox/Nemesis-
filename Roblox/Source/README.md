@@ -4,16 +4,35 @@
 
 ## Иерархия в Studio
 
-- ReplicatedStorage/Nemezida/Shared/NemezidaConfig (ModuleScript)
-- ServerScriptService/Services/CombatService (ModuleScript)
-- ServerScriptService/Services/EnemyAIService (ModuleScript)
-- ServerScriptService/Services/HubGenerator (ModuleScript)
-- ServerScriptService/Services/NemesisService (ModuleScript)
-- ServerScriptService/Bootstrap (Script)
+ReplicatedStorage:
+- Nemezida/Shared/NemezidaConfig (ModuleScript)
+
+ServerScriptService:
+- Bootstrap (Script)
+- Services/CombatService (ModuleScript)
+- Services/EnemyAIService (ModuleScript)
+- Services/HubGenerator (ModuleScript)
+- Services/NemesisService (ModuleScript)
+
+StarterPlayer/StarterPlayerScripts:
+- NemezidaCamera (LocalScript)
+- NemezidaCombat (LocalScript)
+- NemezidaMovement (LocalScript)
+
+## Управление
+
+- WASD — движение (стандартный контроллер Roblox).
+- ЛКМ или F — базовая атака.
+- Z — Удар Печати.
+- X — Теневой рывок.
+- C — Разлом земли.
+- V — Высвобождение Бездны.
+- Shift — бег.
+- Камера — изометрическая, следует за персонажем.
 
 ## Генератор хаба
 
-HubGenerator создаёт детерминированный greybox «Пепельного Рубежа» размером 420×420 studs: границы, центральную площадь, улицы, здания, руины и точку появления. Seed задаётся атрибутом Workspace NemezidaWorldSeed. Одинаковый seed и версия генератора воспроизводят одинаковую планировку.
+HubGenerator создаёт детерминированный greybox «Пепельного Рубежа» размером 420×420 studs: границы, центральную площадь, улицы, здания, руины и точку появления. Seed задаётся атрибутом Workspace NemezidaWorldSeed.
 
 Это пока геометрический прототип. Уникальные художественные модели, полноценные районы, NPC, интерактивные сундуки, навигационные тесты и декор высокого качества ещё впереди.
 
@@ -27,4 +46,4 @@ Bootstrap создаёт ReplicatedStorage/NemezidaRemotes/BasicAttack и UseAbi
 
 ## Ещё не реализовано
 
-Клиентское управление и анимации, модели героя и врагов, HUD, NPC и сундуки, генератор подземелий, лут, сохранения, полноценная адаптация Немезиды, тесты Studio. Не считать этот код готовой игрой до сборки и проверки в Roblox Studio.
+Модели героя и врагов, анимации, полноценный HUD, NPC и сундуки, генератор подземелий, лут, сохранения, полноценная адаптация Немезиды, серверная проверка скорости и тесты Studio. Не считать этот код готовой игрой до сборки и проверки в Roblox Studio.
