@@ -84,12 +84,17 @@ function CombatService.UseAbility(player: Player,name: string,target: Instance?)
  if essence==nil then essence=Config.Player.MaxEssence end
  if essence < ability.EssenceCost then return end
 
- local enemy = validEnemy(target)
+ local enemy = if name == "Barrier" then nil else validEnemy(target)
+ -- Shadow Dash remains usable when the cursor happens to be over a distant or occluded enemy.
+ if name == "ShadowDash" and enemy then
+  if (enemy:GetPivot().Position-root.Position).Magnitude > ability.Range or not hasLineOfSight(character,enemy) then
+   enemy=nil
+  end
+ end
  if name ~= "Barrier" and name ~= "ShadowDash" and not enemy then return end
  if enemy and (enemy:GetPivot().Position-root.Position).Magnitude > ability.Range then return end
  if enemy and not hasLineOfSight(character,enemy) then return end
 
- -- Spend resources only after all request validation has passed.
  lastAbility[player][name]=now
  player:SetAttribute("Essence",essence-ability.EssenceCost)
  NemesisService.RecordAction(player,"Melee")
