@@ -1,0 +1,44 @@
+NEMEZIDA STATIC REVIEW v0.4-dev.3
+Date: 2026-11-26
+Repository: valik123f-collab/Nemesis-
+
+SCOPE
+This is a source-level review only. Roblox Studio, Rojo build, Luau compiler,
+and Play/runtime sessions were NOT launched.
+
+CHANGES
+1. Bootstrap.server.lua now reports v0.4-dev.3 instead of the stale v0.4-dev.1 label.
+2. NemezidaCamera.client.lua reads workspace.CurrentCamera during each render step
+   and reapplies Scriptable mode when Roblox replaces the active camera.
+3. MovementService.lua now acknowledges sprint state to the requesting client.
+   Rejected rapid presses and empty-stamina requests return the authoritative state.
+   Stamina depletion also sends a stop acknowledgement.
+4. NemezidaMovement.client.lua reconciles its requested sprint state with server
+   acknowledgements, avoiding a client-side assumption that a rejected request worked.
+5. Added Tests/STUDIO_TEST_NPC_SETUP.lua, a Studio Command Bar helper that creates
+   a standard R15 NPC, sets the attributes expected by EnemyAIService, and tags it
+   NemezidaEnemy. It is not part of the live game tree and must be run manually.
+6. Updated Roblox/BUILD_AND_TEST.md with the NPC setup procedure and expanded checks.
+
+STATIC REVIEW NOTES
+- Rojo project paths correspond to the source layout reviewed.
+- Bootstrap requires the expected service modules in a coherent order.
+- The shared config is expected at ReplicatedStorage/Nemezida/Shared/NemezidaConfig.
+- Sprint remains server-authoritative for WalkSpeed and Stamina.
+- Camera replacement handling is more robust, but camera behavior still requires Studio.
+- Test NPC creation uses Players:CreateHumanoidModelFromDescriptionAsync and must
+  be confirmed in Studio; the helper is deliberately isolated from production scripts.
+
+KNOWN LIMITATIONS
+- No real Luau typecheck or syntax compilation was performed.
+- No Roblox Studio launch, Rojo sync/build, Play session, multiplayer test, or physics
+  validation was performed.
+- The hub remains a greybox.
+- HUD, final character/enemy art, animations, dungeon generation, loot, DataStore,
+  Nemesis hunter spawning, and dodge implementation remain incomplete.
+- RemoteEvent security, pathfinding, Raycast behavior, and ability physics still need
+  hands-on multiplayer acceptance testing.
+
+RESULT
+The reviewed source changes are committed to GitHub. This report does not claim
+that the project compiles, opens, or runs successfully in Roblox Studio.
