@@ -97,7 +97,11 @@ function CombatService.UseAbility(player: Player,name: string,target: Instance?)
 
  lastAbility[player][name]=now
  player:SetAttribute("Essence",essence-ability.EssenceCost)
- NemesisService.RecordAction(player,"Melee")
+ if name == "Barrier" then
+  NemesisService.RecordAction(player,"Block")
+ else
+  NemesisService.RecordAction(player,"Melee")
+ end
 
  if name == "Barrier" then
   local humanoid = character:FindFirstChildOfClass("Humanoid")
