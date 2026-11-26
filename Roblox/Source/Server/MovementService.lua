@@ -35,8 +35,9 @@ function Service.Init()
  remote.OnServerEvent:Connect(function(player,value)
   if typeof(value)~="boolean" then return end
   local now=os.clock()
-  if now-(lastRequest[player] or 0)<Config.Movement.SprintRequestInterval then return end
-  lastRequest[player]=now
+  -- Releasing sprint is always accepted so a throttled press cannot leave the player running.
+  if value and now-(lastRequest[player] or 0)<Config.Movement.SprintRequestInterval then return end
+  if value then lastRequest[player]=now end
   local character=player.Character
   local humanoid=character and character:FindFirstChildOfClass("Humanoid")
   if not humanoid or humanoid.Health<=0 then return end
