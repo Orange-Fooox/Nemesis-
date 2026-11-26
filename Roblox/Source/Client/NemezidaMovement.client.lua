@@ -6,7 +6,6 @@ local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local player=Players.LocalPlayer
 local remote=ReplicatedStorage:WaitForChild("NemezidaRemotes"):WaitForChild("SetSprinting") :: RemoteEvent
 local requestedSprinting=false
-local confirmedSprinting=false
 
 local function setSprint(value: boolean)
  if requestedSprinting==value then return end
@@ -16,7 +15,6 @@ end
 
 remote.OnClientEvent:Connect(function(serverState)
  if typeof(serverState)~="boolean" then return end
- confirmedSprinting=serverState
  -- If the server rejects a start request (for example, empty stamina), wait
  -- for the player to release and press Shift again instead of pretending to run.
  if not serverState and requestedSprinting then
@@ -33,5 +31,4 @@ end)
 
 player.CharacterAdded:Connect(function()
  requestedSprinting=false
- confirmedSprinting=false
 end)
