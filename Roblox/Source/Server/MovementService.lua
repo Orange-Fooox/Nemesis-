@@ -35,20 +35,28 @@ function Service.Init()
  remote.OnServerEvent:Connect(function(player,value)
   if typeof(value)~="boolean" then return end
   local now=os.clock()
-  -- Releasing sprint is always accepted so a throttled press cannot leave the player running.
-  if value and now-(lastRequest[player] or 0)<Config.Movement.SprintRequestInterval then return end
+  -- A rejected rapid press is acknowledged with the current server state.
+  if value and now-(lastRequest[player] or 0)<Config.Movement.SprintRequestInterval then
+   remote:FireClient(player,player:GetAttribute("IsSprinting")==true)
+   return
+  end
   if value then lastRequest[player]=now end
   local character=player.Character
   local humanoid=character and character:FindFirstChildOfClass("Humanoid")
-  if not humanoid or humanoid.Health<=0 then return end
+  if not humanoid or humanoid.Health<=0 then
+   remote:FireClient(player,false)
+   return
+  end
   local stamina=player:GetAttribute("Stamina") or 0
   if value and stamina<=0 then
    player:SetAttribute("IsSprinting",false)
    humanoid.WalkSpeed=WALK_SPEED
+   remote:FireClient(player,false)
    return
   end
   player:SetAttribute("IsSprinting",value)
   humanoid.WalkSpeed=if value then RUN_SPEED else WALK_SPEED
+  remote:FireClient(player,value)
  end)
 
  task.spawn(function()
@@ -69,6 +77,7 @@ function Service.Init()
       if stamina<=0 then
        player:SetAttribute("IsSprinting",false)
        humanoid.WalkSpeed=WALK_SPEED
+       remote:FireClient(player,false)
       end
      else
       stamina=math.min(maxStamina,stamina+Config.Movement.StaminaRegenPerSecond*dt)
