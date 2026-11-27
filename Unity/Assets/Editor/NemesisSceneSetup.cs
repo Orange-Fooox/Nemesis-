@@ -12,7 +12,7 @@ namespace Nemesis.EditorTools
         [MenuItem("Tools/Nemesis/Create Prototype Scene")]
         public static void CreatePrototypeScene()
         {
-            Scene scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+            Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             GameObject bootstrap = new GameObject("NemesisBootstrap");
             bootstrap.AddComponent<NemesisBootstrap>();
 
