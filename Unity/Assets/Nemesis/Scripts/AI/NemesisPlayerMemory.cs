@@ -27,6 +27,11 @@ namespace Nemesis.AI
         private static int dodges;
         private static int pendingSave;
 
+        static NemesisPlayerMemory()
+        {
+            Application.quitting += Save;
+        }
+
         public static NemesisPlayerStyle DominantStyle
         {
             get
