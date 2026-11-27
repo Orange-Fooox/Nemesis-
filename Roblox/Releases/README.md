@@ -15,3 +15,10 @@
 ## Предыдущий dev-срез: v0.4-dev.4
 
 [NEMEZIDA_Studio_v0_4_dev4.rbxlx](NEMEZIDA_Studio_v0_4_dev4.rbxlx)
+
+
+## Подготовленная asset-сборка: Forest Grove (2026-11-27)
+
+Файл `NEMEZIDA_Forest_Grove_Integrated.rbxlx` подготовлен отдельно на основе переданного пользователем Place-файла. В нём добавлена папка `Workspace/NEMEZIDA - Forest Grove` с 57 моделями лесного окружения; ассеты Polygon Dungeon сохранены. Подробности и ограничения проверки: [DEVLOG v0.4.2](../../docs/DEVLOG_v0_4_2.md).
+
+**Статус публикации:** Place-файл передан пользователю в чате, но пока не загружен в этот GitHub-репозиторий. Текущая версия Place-файла, доступная непосредственно в репозитории, остаётся `NEMEZIDA_Studio_v0_4_dev6.rbxlx`. Новая сборка проверена статически как XML; запуск в Roblox Studio не выполнялся.
