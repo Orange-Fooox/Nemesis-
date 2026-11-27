@@ -1,6 +1,7 @@
 using UnityEngine;
 using Nemesis.Presentation;
 using Nemesis.AI;
+using Nemesis.Controls;
 namespace Nemesis.Player {
  [RequireComponent(typeof(CharacterController))]
  public sealed class TopDownPlayerController:MonoBehaviour {
@@ -9,7 +10,7 @@ namespace Nemesis.Player {
   private void Awake(){controller=GetComponent<CharacterController>();resources=GetComponent<PlayerResources>(); visual=GetComponentInChildren<NemesisCharacterVisual>();}
   private void Update(){
    if(visual==null)visual=GetComponentInChildren<NemesisCharacterVisual>();
-   Vector2 input=Vector2.ClampMagnitude(new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")),1f);
+   Vector2 input=NemesisInput.Move;
    Transform view=Camera.main!=null?Camera.main.transform:transform;
    Vector3 forward=Vector3.ProjectOnPlane(view.forward,Vector3.up).normalized,right=Vector3.ProjectOnPlane(view.right,Vector3.up).normalized;
    Vector3 move=(forward*input.y+right*input.x).normalized;
