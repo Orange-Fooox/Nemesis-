@@ -1,0 +1,40 @@
+name: Unity Windows Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - unity-port
+    paths:
+      - "Unity/**"
+      - ".github/workflows/unity-windows-build.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build Nemesis for Windows x64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build with Unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: Unity
+          unityVersion: 6000.0.23f1
+          targetPlatform: StandaloneWindows64
+          buildMethod: Nemesis.EditorTools.NemesisBuild.PerformBuild
+          allowDirtyBuild: true
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nemesis-Windows-x64
+          path: Unity/Build/
+          if-no-files-found: error
+          retention-days: 14

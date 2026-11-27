@@ -1,0 +1,62 @@
+using UnityEngine;
+using Nemesis.Combat;
+using Nemesis.Presentation;
+
+namespace Nemesis.Enemies
+{
+    public sealed class NemesisBossBrain : MonoBehaviour
+    {
+        [SerializeField] private float detectionRange=24f, moveSpeed=2.1f, meleeRange=3.1f;
+        [SerializeField] private float attackCooldown=4.2f, damage=18f, slamRadius=5f;
+        private Transform target;
+        private Health targetHealth, ownHealth;
+        private NemesisCharacterVisual visual;
+        private float nextAttack;
+        private bool windingUp;
+
+        public void Initialize(Transform player)
+        {
+            target=player; ownHealth=GetComponent<Health>();
+            visual=GetComponentInChildren<NemesisCharacterVisual>();
+            if(ownHealth!=null) ownHealth.Damaged+=OnDamaged;
+        }
+
+        private void OnDestroy(){if(ownHealth!=null)ownHealth.Damaged-=OnDamaged;}
+        private void OnDamaged(float amount){ if(visual!=null) visual.PlayAction("BossSlam",.45f); }
+
+        private void Update()
+        {
+            if(target==null||ownHealth==null||!ownHealth.IsAlive)return;
+            if(visual==null)visual=GetComponentInChildren<NemesisCharacterVisual>();
+            if(targetHealth==null)targetHealth=target.GetComponent<Health>();
+            if(targetHealth==null||!targetHealth.IsAlive)return;
+            Vector3 delta=target.position-transform.position; delta.y=0;
+            float distance=delta.magnitude;
+            if(distance>detectionRange)return;
+            if(distance>meleeRange&&!windingUp)
+            {
+                Vector3 direction=delta.normalized;
+                transform.position+=direction*(moveSpeed*Time.deltaTime);
+                if(visual!=null)visual.SetMotion(moveSpeed,false);
+                if(direction.sqrMagnitude>.001f)transform.rotation=Quaternion.LookRotation(direction);
+                if(visual!=null)visual.SetMotion(moveSpeed,false);
+                return;
+            }
+            if(Time.time>=nextAttack&&!windingUp)StartCoroutine(Slam());
+        }
+
+        private System.Collections.IEnumerator Slam()
+        {
+            windingUp=true; nextAttack=Time.time+attackCooldown;
+            if(visual!=null)visual.PlayAction("BossSlam",1.1f);
+            yield return new WaitForSeconds(1.0f);
+            if(target!=null&&Vector3.Distance(new Vector3(target.position.x,0,target.position.z),
+                new Vector3(transform.position.x,0,transform.position.z))<=slamRadius)
+            {
+                float amount=CombatRules.CalculateDamage(damage,1f,targetHealth!=null?targetHealth.Defense:0f);
+                if(targetHealth!=null)targetHealth.ApplyDamage(amount);
+            }
+            windingUp=false;
+        }
+    }
+}
