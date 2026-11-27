@@ -72,28 +72,28 @@ namespace Nemesis.World
                 Box("AshenReach_Ground", new Vector3(0f, -.45f, 0f),
                     new Vector3(WorldHalfSize * 2f, .9f, WorldHalfSize * 2f), GroundColor);
 
-                Box("NorthSouth_MainRoad", new Vector3(0f, .025f, 0f),
+                VisualBox("NorthSouth_MainRoad", new Vector3(0f, .025f, 0f),
                     new Vector3(5.2f, .12f, WorldHalfSize * 2f - 2f), RoadColor);
-                Box("EastWest_MainRoad", new Vector3(0f, .03f, 0f),
+                VisualBox("EastWest_MainRoad", new Vector3(0f, .03f, 0f),
                     new Vector3(WorldHalfSize * 2f - 2f, .13f, 5.2f), RoadColor);
 
                 for (int i = -1; i <= 1; i += 2)
                 {
                     float offset = i * 15f;
-                    Box("DistrictNorthSouthRoad_" + i, new Vector3(offset, .045f, 0f),
+                    VisualBox("DistrictNorthSouthRoad_" + i, new Vector3(offset, .045f, 0f),
                         new Vector3(2.3f, .12f, WorldHalfSize * 2f - 6f), RoadColor);
-                    Box("DistrictEastWestRoad_" + i, new Vector3(0f, .045f, offset),
+                    VisualBox("DistrictEastWestRoad_" + i, new Vector3(0f, .045f, offset),
                         new Vector3(WorldHalfSize * 2f - 6f, .12f, 2.3f), RoadColor);
                 }
 
-                Box("CentralSquare_Stone", new Vector3(0f, .11f, 0f),
+                VisualBox("CentralSquare_Stone", new Vector3(0f, .11f, 0f),
                     new Vector3(21f, .18f, 21f), new Color(.37f, .34f, .32f));
 
                 for (int i = 0; i < 4; i++)
                 {
                     float angle = i * 90f;
                     Vector3 position = Quaternion.Euler(0f, angle, 0f) * new Vector3(8.8f, .24f, 0f);
-                    Box("Square_Rune_Inlay_" + i, position,
+                    VisualBox("Square_Rune_Inlay_" + i, position,
                         new Vector3(1.25f, .055f, .34f), new Color(.42f, .29f, .52f),
                         Quaternion.Euler(0f, angle, 0f));
                 }
@@ -236,7 +236,7 @@ namespace Nemesis.World
 
             private void BuildChapel(Vector3 p)
             {
-                Box("BrokenChapel_Floor", p + new Vector3(0f, .12f, 0f),
+                VisualBox("BrokenChapel_Floor", p + new Vector3(0f, .12f, 0f),
                     new Vector3(10f, .24f, 8f), StoneColor);
                 Box("BrokenChapel_LeftWall", p + new Vector3(-4.2f, 2.1f, 0f),
                     new Vector3(.65f, 4.2f, 7.8f), DarkStoneColor);
@@ -299,7 +299,7 @@ namespace Nemesis.World
                 VisualBox("SoulGate_RuneFrame", p + new Vector3(0f, 3.9f, -.45f),
                     new Vector3(3.5f, 6.3f, .16f), MagicColor);
                 AddPointLight(p + new Vector3(0f, 4f, -2.2f), new Color(.48f, .16f, .9f), 5f, 12f);
-                Box("SoulGate_Approach", p + new Vector3(0f, .1f, -4.2f),
+                VisualBox("SoulGate_Approach", p + new Vector3(0f, .1f, -4.2f),
                     new Vector3(10f, .2f, 8f), RoadColor);
             }
 
