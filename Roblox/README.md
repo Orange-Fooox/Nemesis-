@@ -1,10 +1,10 @@
 # Roblox project
 
-Текущая сборка: v0.4-dev.4.
+Текущая сборка: v0.4-dev.5.
 
-- Готовый файл Studio: Releases/NEMEZIDA_Studio_v0_4_dev4.rbxlx.
+- Готовый файл Studio: Releases/NEMEZIDA_Studio_v0_4_dev5.rbxlx.
 - Luau-исходники: Source/.
-- Инструкция по открытию и тестированию: BUILD_AND_TEST.md.
+- Инструкция: BUILD_AND_TEST.md.
 - Приёмочные тесты: ../Tests/ACCEPTANCE_TESTS_v0_4.md.
 
-Открой Place-файл через Roblox Studio → File → Open from File. До проверки Play в Studio статус остаётся dev / статически проверено.
+Обычный запуск: открыть Place-файл через Roblox Studio → File → Open from File → Play (F5). Генерация мира и появление персонажа выполняются автоматически. Command Bar не нужен.
