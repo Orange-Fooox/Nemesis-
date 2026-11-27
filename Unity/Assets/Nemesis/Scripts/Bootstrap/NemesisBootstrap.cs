@@ -77,9 +77,11 @@ namespace Nemesis.Bootstrap
                 GameObject enemy = new GameObject("Enemy_AshRaider_" + (i + 1));
                 enemy.transform.position = spawns[i];
 
-                CapsuleCollider collider = enemy.AddComponent<CapsuleCollider>();
-                collider.height = 2f;
-                collider.radius = .42f;
+                CharacterController motor = enemy.AddComponent<CharacterController>();
+                motor.height = 2f;
+                motor.radius = .42f;
+                motor.center = new Vector3(0f, 1f, 0f);
+                motor.skinWidth = .06f;
 
                 enemy.AddComponent<Health>().Initialize(55f, 2f);
                 enemy.AddComponent<EnemyBrain>().Initialize(target, 18f, 1.4f, 2.4f, 9f, 1.8f);
@@ -94,9 +96,11 @@ namespace Nemesis.Bootstrap
             GameObject boss = new GameObject("Boss_Ashen_Warlord");
             boss.transform.position = spawn;
 
-            CapsuleCollider collider = boss.AddComponent<CapsuleCollider>();
-            collider.height = 2.8f;
-            collider.radius = .72f;
+            CharacterController motor = boss.AddComponent<CharacterController>();
+            motor.height = 2.8f;
+            motor.radius = .72f;
+            motor.center = new Vector3(0f, 1.4f, 0f);
+            motor.skinWidth = .08f;
 
             boss.AddComponent<Health>().Initialize(450f, 8f);
             boss.AddComponent<NemesisBossBrain>().Initialize(target);
