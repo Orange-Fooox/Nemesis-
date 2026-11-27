@@ -1,5 +1,6 @@
 using UnityEngine;
 using Nemesis.Presentation;
+using Nemesis.AI;
 namespace Nemesis.Player {
  [RequireComponent(typeof(CharacterController))]
  public sealed class TopDownPlayerController:MonoBehaviour {
@@ -18,6 +19,6 @@ namespace Nemesis.Player {
    Vector3 velocity=move*speed+Vector3.up*verticalVelocity+(Time.time<dashUntil?dashVelocity:Vector3.zero); if(visual!=null)visual.SetMotion(move.magnitude*(resources!=null&&resources.IsSprinting?1.5f:1f),resources!=null&&resources.IsSprinting);
    controller.Move(velocity*Time.deltaTime);
   }
-  public void Dash(float distance,float duration){dashVelocity=transform.forward*(distance/Mathf.Max(0.05f,duration));dashUntil=Time.time+duration; if(visual!=null)visual.PlayAction("Dodge",duration);}
+  public void Dash(float distance,float duration,bool countAsDodge=true){dashVelocity=transform.forward*(distance/Mathf.Max(0.05f,duration));dashUntil=Time.time+duration; if(visual!=null)visual.PlayAction("Dodge",duration); if(countAsDodge)NemesisPlayerMemory.RecordDodge();}
  }
 }
