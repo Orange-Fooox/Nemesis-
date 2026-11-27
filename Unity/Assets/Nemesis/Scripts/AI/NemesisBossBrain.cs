@@ -11,13 +11,15 @@ namespace Nemesis.Enemies
         [SerializeField] private float attackCooldown=4.2f, damage=18f, slamRadius=5f;
         private Transform target;
         private Health targetHealth, ownHealth;
+        private CharacterController motor;
+        private float verticalVelocity;
         private NemesisCharacterVisual visual;
         private float nextAttack;
         private bool windingUp; private bool adapted;
 
         public void Initialize(Transform player)
         {
-            target=player; ownHealth=GetComponent<Health>();
+            target=player; ownHealth=GetComponent<Health>(); motor=GetComponent<CharacterController>();
             visual=GetComponentInChildren<NemesisCharacterVisual>();
             if(ownHealth!=null) ownHealth.Damaged+=OnDamaged;
         }
@@ -55,13 +57,23 @@ namespace Nemesis.Enemies
             if(distance>meleeRange&&!windingUp)
             {
                 Vector3 direction=delta.normalized;
-                transform.position+=direction*(moveSpeed*Time.deltaTime);
+                if(direction.sqrMagnitude>.001f)transform.rotation=Quaternion.LookRotation(direction);
+                Move(direction);
                 if(visual!=null)visual.SetMotion(moveSpeed,false);
                 if(direction.sqrMagnitude>.001f)transform.rotation=Quaternion.LookRotation(direction);
                 if(visual!=null)visual.SetMotion(moveSpeed,false);
                 return;
             }
+            Move(Vector3.zero);
             if(Time.time>=nextAttack&&!windingUp)StartCoroutine(Slam());
+        }
+
+        private void Move(Vector3 direction)
+        {
+            if(motor==null){transform.position+=direction*(moveSpeed*Time.deltaTime);return;}
+            if(motor.isGrounded&&verticalVelocity<0f)verticalVelocity=-2f;
+            else verticalVelocity+=-22f*Time.deltaTime;
+            motor.Move((direction*moveSpeed+Vector3.up*verticalVelocity)*Time.deltaTime);
         }
 
         private System.Collections.IEnumerator Slam()
