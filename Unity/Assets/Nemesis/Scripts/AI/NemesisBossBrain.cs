@@ -60,8 +60,6 @@ namespace Nemesis.Enemies
                 if(direction.sqrMagnitude>.001f)transform.rotation=Quaternion.LookRotation(direction);
                 Move(direction);
                 if(visual!=null)visual.SetMotion(moveSpeed,false);
-                if(direction.sqrMagnitude>.001f)transform.rotation=Quaternion.LookRotation(direction);
-                if(visual!=null)visual.SetMotion(moveSpeed,false);
                 return;
             }
             Move(Vector3.zero);
