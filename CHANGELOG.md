@@ -1,3 +1,10 @@
+## 2026-11-27 — v0.4-dev.6 (последняя сборка в GitHub)
+- Сохранена актуальная Place-сборка `Roblox/Releases/NEMEZIDA_Studio_v0_4_dev6.rbxlx`.
+- Исправлена синтаксическая ошибка NemesisService, блокировавшая загрузку CombatService и Bootstrap.
+- Уточнены инструкции обычного запуска: открыть Place и нажать Play (F5), без Command Bar.
+- Более поздние DEVLOG v0.4.1 и v0.4.2 описывают отдельные артефакты, переданные в чате; их Place-файлы не опубликованы в этом репозитории и не заменяют доступную сборку dev6.
+- Удалены устаревшие бинарные Place-файлы v0.3 и v0.4-dev.3–dev.5; сохранена только последняя доступная сборка dev6.
+
 ## 2026-11-27 — аудит Polygon Pack и план Unity-переноса
 - Проверен Place-файл NEMEZIDA_Forest_Grove_Placed_v2(1).rbxlx.
 - Подтверждено содержимое Workspace/Meshes: 542 MeshPart с именами PolygonDungeon (530 Environment и 12 Props по именам) и один Polygon-модуль.
