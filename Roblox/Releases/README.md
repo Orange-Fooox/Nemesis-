@@ -1,25 +1,19 @@
-# Roblox Studio export — v0.4-dev.3
+# Roblox Studio releases
 
-Файл: [NEMEZIDA_Studio_v0_4_dev3.rbxlx](NEMEZIDA_Studio_v0_4_dev3.rbxlx)
+## Текущая dev-сборка: v0.4-dev.4
 
-Это XML Place-файл Roblox Studio, собранный из исходников репозитория на момент v0.4-dev.3. Внутри размещены:
+[NEMEZIDA_Studio_v0_4_dev4.rbxlx](NEMEZIDA_Studio_v0_4_dev4.rbxlx)
 
-- ReplicatedStorage/Nemezida/Shared/NemezidaConfig
-- ServerScriptService/Bootstrap и Services (CombatService, EnemyAIService, HubGenerator, NemesisService, MovementService)
-- StarterPlayer/StarterPlayerScripts (изометрическая камера, бой, движение)
-- Базовые настройки тёмного освещения
+Содержит 12 исходных объектов скриптов: 7 ModuleScript, 1 Script и 4 LocalScript. Включены безопасный порядок старта, коллизионный хаб, direct Workspace SpawnLocation, резервная площадка, шесть автоматически создаваемых врагов и HUD.
 
-## Открытие
+Открытие: скачать файл и выбрать в Roblox Studio File → Open from File.
 
-1. Скачай .rbxlx из GitHub.
-2. В Roblox Studio открой File → Open from File.
-3. Нажми Play (F5).
+Проверки этой сборки ограничены статической сверкой XML, иерархии и точного совпадения встроенных источников с 12 Luau-файлами. Roblox Studio, Luau compiler, Rojo CLI и Play session не запускались. Это dev-прототип, не подтверждённый runtime-релиз.
 
-Хаб «Пепельный Рубеж» создаётся серверным HubGenerator при запуске. Для ручной проверки AI/боя создай тестового R15 NPC скриптом Tests/STUDIO_TEST_NPC_SETUP.lua через Command Bar во время Play.
+Тест безопасного старта: Tests/STUDIO_WORLD_SPAWN_TEST.lua. Инструкция: Roblox/BUILD_AND_TEST.md.
 
-## Статус проверки
+## Предыдущий dev-срез: v0.4-dev.3
 
-- XML: статическая проверка структуры тегов пройдена.
-- Состав: 10 исходных Luau-файлов встроены в 10 объектов скриптов/модулей.
-- Roblox Studio / Play: не проверено в этой среде.
-- Это dev-прототип, не публичный релиз и не гарантия отсутствия runtime-ошибок.
+[NEMEZIDA_Studio_v0_4_dev3.rbxlx](NEMEZIDA_Studio_v0_4_dev3.rbxlx)
+
+Предыдущая версия сохранена для сравнения и отката.
