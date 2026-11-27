@@ -93,9 +93,9 @@ namespace Nemesis.AI
             int total = melee + abilities + dodges;
             if (total > MaximumCounter)
             {
-                melee = Mathf.Max(1, Mathf.RoundToInt(melee * .5f));
-                abilities = Mathf.Max(1, Mathf.RoundToInt(abilities * .5f));
-                dodges = Mathf.Max(1, Mathf.RoundToInt(dodges * .5f));
+                melee = Mathf.RoundToInt(melee * .5f);
+                abilities = Mathf.RoundToInt(abilities * .5f);
+                dodges = Mathf.RoundToInt(dodges * .5f);
             }
 
             pendingSave++;
