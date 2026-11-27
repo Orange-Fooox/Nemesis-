@@ -371,7 +371,7 @@ namespace Nemesis.World
                 else if (string.Equals(category, "tree", StringComparison.OrdinalIgnoreCase))
                 {
                     CreatePrimitive(name + "_Trunk", PrimitiveType.Cylinder,
-                        ground + Vector3.up * 1.25f, new Vector3(.55f, 2.5f, .55f),
+                        ground + Vector3.up * 1.25f, new Vector3(.55f, 1.25f, .55f),
                         new Color(.22f, .15f, .11f));
                     instance = CreatePrimitive(name + "_Canopy", PrimitiveType.Sphere,
                         ground + Vector3.up * 3.1f, new Vector3(2.6f, 2.1f, 2.6f), fallbackColor);
