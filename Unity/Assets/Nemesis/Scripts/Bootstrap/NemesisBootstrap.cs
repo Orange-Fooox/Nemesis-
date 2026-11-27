@@ -63,13 +63,12 @@ namespace Nemesis.Bootstrap
         private void SpawnArenaProp(string category,string objectName,Vector3 groundPosition,Vector3 fallbackScale,PrimitiveType fallbackType,Color fallbackColor)
         {
             GameObject prefab=assetCatalog!=null?assetCatalog.FindPrefab(category):null;
+            if(prefab!=null&&prefab.GetComponentInChildren<MonoBehaviour>(true)!=null)prefab=null;
             GameObject instance;
 
             if(prefab!=null)
             {
                 instance=Instantiate(prefab,groundPosition,Quaternion.identity);
-                MonoBehaviour[] embeddedScripts=instance.GetComponentsInChildren<MonoBehaviour>(true);
-                foreach(MonoBehaviour script in embeddedScripts)script.enabled=false;
                 Renderer[] renderers=instance.GetComponentsInChildren<Renderer>(true);
                 if(renderers.Length>0)
                 {
