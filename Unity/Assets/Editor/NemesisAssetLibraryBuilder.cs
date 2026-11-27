@@ -89,7 +89,9 @@ namespace Nemesis.EditorTools
             if (File.Exists(path)) AssetDatabase.DeleteAsset(path);
             GameObject go = GameObject.CreatePrimitive(type);
             go.name = name;
-            go.transform.localScale = scale;
+            go.transform.localScale = type == PrimitiveType.Cylinder
+                ? new Vector3(scale.x, scale.y * .5f, scale.z)
+                : scale;
             var material = new Material(FindLitShader());
             material.color = color;
             string materialPath = Materials + "/" + name + ".mat";
