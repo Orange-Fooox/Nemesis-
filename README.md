@@ -52,8 +52,9 @@
 3. Укажи каталог `Unity/` внутри репозитория.
 4. Дождись импорта и компиляции.
 5. В меню Unity выбери **Tools → Nemesis → Generate Asset Library**.
-6. Если тестовая сцена отсутствует, выполни **Tools → Nemesis → Create Prototype Scene**.
-7. Открой `Assets/Scenes/NemesisPrototype.unity` и нажми **Play**.
+6. Выполни **Tools → Nemesis → Scan Imported Asset Packs**, чтобы подключить уже импортированные модели и пропсы.
+7. Если тестовая сцена отсутствует, выполни **Tools → Nemesis → Create Prototype Scene**.
+8. Открой `Assets/Scenes/NemesisPrototype.unity` и нажми **Play**.
 
 Подробная инструкция: [Unity README](Unity/README.md).
 
