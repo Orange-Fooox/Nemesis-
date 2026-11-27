@@ -1,7 +1,7 @@
 # Unity development status
 
 Updated: 2026-11-27  
-Target: Unity 6 (6000.0.23f1)
+Target: Unity 6 (6000.0.85f2)
 
 ## Milestone 0 — Unity foundation
 - [x] Unity project structure and C# runtime scripts added.
