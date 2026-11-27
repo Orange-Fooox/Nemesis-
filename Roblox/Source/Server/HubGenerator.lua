@@ -90,7 +90,7 @@ function HubGenerator.Generate(seed: number?)
  local root = Instance.new("Folder")
  root.Name = "NemezidaGeneratedHub"
  root:SetAttribute("WorldSeed", actualSeed)
- root:SetAttribute("GeneratorVersion", "0.4.0-dev.4")
+ root:SetAttribute("GeneratorVersion", "0.4.0-dev.5")
  root.Parent = Workspace
 
  -- A solid, anchored ground plane is created before any decorative geometry.
