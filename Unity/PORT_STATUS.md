@@ -12,7 +12,10 @@ Target: Unity 6 (6000.0.85f2)
 - [x] Ashen Warlord boss prototype with telegraphed area attack.
 - [x] Procedural low-poly character, equipment and environment placeholder kit.
 - [x] Editor menu for asset library and prototype scene generation.
+- [x] Editor catalog scanner for imported Prefab/Model assets.
+- [x] Local player combat telemetry and first bounded enemy adaptation response.
 - [ ] Open in Unity Editor, compile and playtest.
+- [ ] Confirm that the locally installed armory package is discovered and correctly fitted to character anchors.
 - [ ] Confirm Windows x64 build.
 
 ## Milestone 1 — playable vertical slice
