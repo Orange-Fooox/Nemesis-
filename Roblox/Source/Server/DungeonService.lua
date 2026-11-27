@@ -131,19 +131,21 @@ end
 function DungeonService.Init()
  if started then return end
  started=true
- Lighting.ClockTime=1.15
- Lighting.Brightness=1.6
- Lighting.Ambient=Color3.fromRGB(48,43,56)
- Lighting.OutdoorAmbient=Color3.fromRGB(31,29,39)
- Lighting.EnvironmentDiffuseScale=0.35
- Lighting.EnvironmentSpecularScale=0.25
+ Lighting.ClockTime=14.35
+ Lighting.Brightness=2.7
+ Lighting.Ambient=Color3.fromRGB(118,112,122)
+ Lighting.OutdoorAmbient=Color3.fromRGB(145,137,127)
+ Lighting.EnvironmentDiffuseScale=0.75
+ Lighting.EnvironmentSpecularScale=0.45
  local atmosphere=Lighting:FindFirstChild("NemezidaAtmosphere") or Instance.new("Atmosphere")
- atmosphere.Name="NemezidaAtmosphere"; atmosphere.Density=0.38; atmosphere.Offset=0.12
- atmosphere.Color=Color3.fromRGB(104,91,125); atmosphere.Decay=Color3.fromRGB(35,29,43)
- atmosphere.Glare=0.12; atmosphere.Haze=2.1; atmosphere.Parent=Lighting
+ atmosphere.Name="NemezidaAtmosphere"; atmosphere.Density=0.16; atmosphere.Offset=0.05
+ atmosphere.Color=Color3.fromRGB(190,181,194); atmosphere.Decay=Color3.fromRGB(104,94,91)
+ atmosphere.Glare=0.05; atmosphere.Haze=0.55; atmosphere.Parent=Lighting
  local grade=Lighting:FindFirstChild("NemezidaColorGrade") or Instance.new("ColorCorrectionEffect")
- grade.Name="NemezidaColorGrade"; grade.Brightness=-0.04; grade.Contrast=0.18
- grade.Saturation=-0.22; grade.TintColor=Color3.fromRGB(218,199,230); grade.Parent=Lighting
+ grade.Name="NemezidaColorGrade"; grade.Brightness=0.015; grade.Contrast=0.06
+ grade.Saturation=-0.04; grade.TintColor=Color3.fromRGB(255,245,232); grade.Parent=Lighting
+ local bloom=Lighting:FindFirstChild("NemezidaBloom") or Instance.new("BloomEffect")
+ bloom.Name="NemezidaBloom"; bloom.Intensity=0.18; bloom.Size=22; bloom.Threshold=1.6; bloom.Parent=Lighting
  buildHubGate()
  buildDungeon()
  buildHubNPCs()

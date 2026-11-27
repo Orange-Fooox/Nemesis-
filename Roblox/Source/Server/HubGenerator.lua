@@ -35,9 +35,9 @@ local function makeBuilding(rng: Random, parent: Instance, name: string, x: numb
  local width = rng:NextInteger(18, 30)
  local depth = rng:NextInteger(18, 30)
  local height = rng:NextInteger(12, 28)
- local body = makePart(parent, name, Vector3.new(width, height, depth), CFrame.new(x, height/2, z), Color3.fromRGB(42, 42, 48), Enum.Material.Slate)
+ local body = makePart(parent, name, Vector3.new(width, height, depth), CFrame.new(x, height/2, z), Color3.fromRGB(119, 105, 88), Enum.Material.Cobblestone)
  body:SetAttribute("GeneratedBuilding", true)
- local roof = makePart(parent, name .. "_Roof", Vector3.new(width+2, 2, depth+2), CFrame.new(x, height+1, z), Color3.fromRGB(22, 22, 28), Enum.Material.Metal)
+ local roof = makePart(parent, name .. "_Roof", Vector3.new(width+2, 2, depth+2), CFrame.new(x, height+1, z), Color3.fromRGB(76, 58, 51), Enum.Material.WoodPlanks)
  roof:SetAttribute("GeneratedDecoration", true)
 end
 
@@ -94,13 +94,13 @@ function HubGenerator.Generate(seed: number?)
  root.Parent = Workspace
 
  -- A solid, anchored ground plane is created before any decorative geometry.
- local ground = makePart(root, "AshenGround", Vector3.new(SIZE, 2, SIZE), CFrame.new(0, -1, 0), Color3.fromRGB(55, 53, 52), Enum.Material.Slate)
+ local ground = makePart(root, "AshenGround", Vector3.new(SIZE, 2, SIZE), CFrame.new(0, -1, 0), Color3.fromRGB(94, 111, 79), Enum.Material.Grass)
  ground:SetAttribute("IsWorldGround", true)
 
  -- Raised, wide spawn plaza prevents the character from appearing on seams or debris.
- local plaza = makePart(root, "SpawnPlaza", Vector3.new(42, 1, 42), CFrame.new(0, 0.5, SPAWN_POSITION.Z), Color3.fromRGB(79, 70, 72), Enum.Material.Cobblestone)
+ local plaza = makePart(root, "SpawnPlaza", Vector3.new(42, 1, 42), CFrame.new(0, 0.5, SPAWN_POSITION.Z), Color3.fromRGB(130, 118, 100), Enum.Material.Cobblestone)
  plaza:SetAttribute("ProtectedSpawnArea", true)
- makePart(root, "SpawnInset", Vector3.new(14, 0.12, 14), CFrame.new(0, 1.06, SPAWN_POSITION.Z), Color3.fromRGB(60, 43, 76), Enum.Material.Slate)
+ makePart(root, "SpawnInset", Vector3.new(14, 0.12, 14), CFrame.new(0, 1.06, SPAWN_POSITION.Z), Color3.fromRGB(101, 83, 72), Enum.Material.Slate)
 
  -- Perimeter walls.
  local walls = {
@@ -108,18 +108,18 @@ function HubGenerator.Generate(seed: number?)
   {-HALF, 0, 8, SIZE}, {HALF, 0, 8, SIZE},
  }
  for _, entry in walls do
-  makePart(root, "PerimeterWall", Vector3.new(entry[3], 18, entry[4]), CFrame.new(entry[1], 9, entry[2]), Color3.fromRGB(25, 25, 30), Enum.Material.Basalt)
+  makePart(root, "PerimeterWall", Vector3.new(entry[3], 18, entry[4]), CFrame.new(entry[1], 9, entry[2]), Color3.fromRGB(76, 72, 69), Enum.Material.Rock)
  end
 
  -- Main streets and protected central square.
- makePart(root, "NorthSouthRoad", Vector3.new(18, 0.25, SIZE-20), CFrame.new(0, 0.15, 0), Color3.fromRGB(75, 70, 66), Enum.Material.Cobblestone)
+ makePart(root, "NorthSouthRoad", Vector3.new(18, 0.25, SIZE-20), CFrame.new(0, 0.15, 0), Color3.fromRGB(137, 125, 105), Enum.Material.Cobblestone)
  makePart(root, "EastWestRoad", Vector3.new(SIZE-20, 0.25, 18), CFrame.new(0, 0.16, 0), Color3.fromRGB(75, 70, 66), Enum.Material.Cobblestone)
- makePart(root, "CentralSquare", Vector3.new(60, 0.5, 60), CFrame.new(0, 0.25, 0), Color3.fromRGB(90, 82, 70), Enum.Material.Cobblestone)
+ makePart(root, "CentralSquare", Vector3.new(60, 0.5, 60), CFrame.new(0, 0.25, 0), Color3.fromRGB(154, 137, 111), Enum.Material.Cobblestone)
 
  -- A small focal monument makes the square readable from the isometric camera.
- local altarBase = makePart(root, "AbyssAltarBase", Vector3.new(12, 2, 12), CFrame.new(0, 1, 0), Color3.fromRGB(29, 26, 34), Enum.Material.Basalt)
+ local altarBase = makePart(root, "AbyssAltarBase", Vector3.new(12, 2, 12), CFrame.new(0, 1, 0), Color3.fromRGB(78, 66, 63), Enum.Material.Slate)
  altarBase:SetAttribute("InteractableLandmark", true)
- makePart(root, "AbyssAltarCore", Vector3.new(3, 9, 3), CFrame.new(0, 6.5, 0), Color3.fromRGB(92, 45, 130), Enum.Material.Neon)
+ makePart(root, "AbyssAltarCore", Vector3.new(3, 9, 3), CFrame.new(0, 6.5, 0), Color3.fromRGB(120, 76, 171), Enum.Material.Neon)
 
  -- District blocks: market, shrine, ruined homes and corrupted outskirts.
  local slots = {
@@ -131,6 +131,21 @@ function HubGenerator.Generate(seed: number?)
   local x = slot[1] + rng:NextInteger(-8, 8)
   local z = slot[2] + rng:NextInteger(-8, 8)
   makeBuilding(rng, root, "RuinedBuilding_" .. index, x, z)
+ end
+
+ -- Stylized woodland edge built from native Roblox materials; Creator Store packs are documented separately.
+ local treePositions = {
+  Vector3.new(-178,0,-165), Vector3.new(-145,0,-180), Vector3.new(155,0,-170), Vector3.new(182,0,-132),
+  Vector3.new(-180,0,12), Vector3.new(182,0,28), Vector3.new(-170,0,185), Vector3.new(170,0,184),
+  Vector3.new(-118,0,175), Vector3.new(112,0,180), Vector3.new(-190,0,112), Vector3.new(190,0,-55),
+ }
+ for _, pos in treePositions do
+  local trunk = makePart(root, "AshenOakTrunk", Vector3.new(3,10,3), CFrame.new(pos.X,5,pos.Z), Color3.fromRGB(91,65,48), Enum.Material.Wood)
+  trunk.Shape = Enum.PartType.Cylinder
+  local crown = makePart(root, "AshenOakCanopy", Vector3.new(15,13,15), CFrame.new(pos.X,13,pos.Z), Color3.fromRGB(72,111,69), Enum.Material.LeafyGrass)
+  crown.Shape = Enum.PartType.Ball; crown.CanCollide = false; crown.CanTouch = false
+  local crown2 = makePart(root, "AshenOakCanopy", Vector3.new(10,9,10), CFrame.new(pos.X+4,16,pos.Z-2), Color3.fromRGB(91,132,78), Enum.Material.Grass)
+  crown2.Shape = Enum.PartType.Ball; crown2.CanCollide = false; crown2.CanTouch = false
  end
 
  -- Warm cursed lanterns break up the grey stone palette and make routes readable.
@@ -162,7 +177,7 @@ function HubGenerator.Generate(seed: number?)
    local size = rng:NextInteger(2, 6)
    local rubble = makePart(root, "AshenRubble", Vector3.new(size, size, size),
     CFrame.new(x, size/2, z) * CFrame.Angles(0, rng:NextNumber(0, math.pi), rng:NextNumber(-0.2, 0.2)),
-    Color3.fromRGB(48, 46, 46), Enum.Material.Rock)
+    Color3.fromRGB(101, 91, 78), Enum.Material.Rock)
    rubble.CanCollide = true
   end
  end

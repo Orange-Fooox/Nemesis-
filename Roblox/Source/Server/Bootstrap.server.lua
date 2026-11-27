@@ -74,4 +74,4 @@ worldReady=true; Workspace:SetAttribute("NemezidaWorldReady",true); Players.Char
 for _,player in Players:GetPlayers() do
  if not player.Character then task.spawn(function() local loaded,loadError=pcall(function() player:LoadCharacterAsync() end); if not loaded then warn("[Немезида Spawn] Не удалось загрузить персонажа:",loadError) end end) end
 end
-print("[Немезида] Автозапуск v0.4.1-dev.1 завершён. Мир готов:",worldReady,"Хаб создан:",generated,"Точка спавна:",spawnLocation:GetFullName())
+print("[Немезида] Автозапуск v0.4.1-visual-pass.1 завершён. Мир готов:",worldReady,"Хаб создан:",generated,"Точка спавна:",spawnLocation:GetFullName())
