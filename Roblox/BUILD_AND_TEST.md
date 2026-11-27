@@ -2,7 +2,7 @@
 
 ## Что это за сборка
 
-Репозиторий содержит Luau-исходники dev-среза v0.4-dev.3 и конфигурацию Rojo. Это не экспортированный бинарный `.rbxlx`. Изменения v0.4-dev.3 внесены в текстовые исходники без запуска Roblox Studio.
+Репозиторий содержит XML Place-файл Releases/NEMEZIDA_Studio_v0_4_dev3.rbxlx, собранный из Luau-исходников v0.4-dev.3. Его можно открыть напрямую через File → Open from File. Файл и иерархия скриптов проверены статически; Roblox Studio, Play session и Luau runtime-проверка в этой среде не запускались. Rojo нужен только для синхронизации исходников при дальнейшей разработке.
 
 ## Требования
 
@@ -10,7 +10,14 @@
 - Rojo 7.x (плагин Roblox Studio и CLI).
 - Git.
 
-## Получение проекта
+## Открытие готового файла Studio
+
+1. Скачай Roblox/Releases/NEMEZIDA_Studio_v0_4_dev3.rbxlx из GitHub.
+2. В Roblox Studio выбери File → Open from File и укажи скачанный .rbxlx.
+3. Нажми Play (F5). В Output ожидается сообщение о запуске серверных служб, а в Workspace — папка NemezidaGeneratedHub.
+4. В текущем срезе NPC не создаются автоматически. Для ручной проверки боя запусти Tests/STUDIO_TEST_NPC_SETUP.lua в Command Bar во время Play.
+
+## Получение проекта исходников через Rojo
 
 1. Клонируй репозиторий:
    `git clone https://github.com/valik123f-collab/Nemesis-.git`
