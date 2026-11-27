@@ -2,6 +2,7 @@ using UnityEngine;
 using Nemesis.Player;
 using Nemesis.Presentation;
 using Nemesis.AI;
+using Nemesis.Controls;
 namespace Nemesis.Combat {
  [RequireComponent(typeof(PlayerResources))]
  public sealed class PlayerAbilityController:MonoBehaviour {
@@ -11,9 +12,13 @@ namespace Nemesis.Combat {
   private static readonly float[] Costs={15f,20f,30f,60f,25f},Cooldowns={6f,8f,14f,45f,18f};
   private void Awake(){resources=GetComponent<PlayerResources>();movement=GetComponent<TopDownPlayerController>(); visual=GetComponentInChildren<NemesisCharacterVisual>();}
   private void Update(){
-   if(Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.F))BasicAttack();
-   if(Input.GetKeyDown(KeyCode.Space)&&resources.SpendStamina(25f)&&movement!=null)movement.Dash(8f,0.18f);
-   if(Input.GetKeyDown(KeyCode.Z))Use(0);if(Input.GetKeyDown(KeyCode.X))Use(1);if(Input.GetKeyDown(KeyCode.C))Use(2);if(Input.GetKeyDown(KeyCode.V))Use(3);if(Input.GetKeyDown(KeyCode.B))Use(4);
+   if(NemesisInput.WasPressed(NemesisInputAction.Attack))BasicAttack();
+   if(NemesisInput.WasPressed(NemesisInputAction.Dodge)&&resources.SpendStamina(25f)&&movement!=null)movement.Dash(8f,0.18f);
+   if(NemesisInput.WasPressed(NemesisInputAction.SealStrike))Use(0);
+   if(NemesisInput.WasPressed(NemesisInputAction.ShadowDash))Use(1);
+   if(NemesisInput.WasPressed(NemesisInputAction.EarthRend))Use(2);
+   if(NemesisInput.WasPressed(NemesisInputAction.AbyssRelease))Use(3);
+   if(NemesisInput.WasPressed(NemesisInputAction.Barrier))Use(4);
   }
   private Health FindTarget(float range){
    Collider[] hits=Physics.OverlapSphere(transform.position,range);Health best=null;float nearest=range;
