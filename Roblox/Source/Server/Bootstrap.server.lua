@@ -83,8 +83,10 @@ else
 end
 
 -- Always provide a known, collidable floor even if world generation fails.
-local fallbackFloor = Workspace:FindFirstChild("NemezidaFallbackFloor")
-if not fallbackFloor then
+local generatedHub = Workspace:FindFirstChild("NemezidaGeneratedHub")
+local mainGround = generatedHub and generatedHub:FindFirstChild("AshenGround")
+local needsFallback = not generated or not mainGround or not mainGround:IsA("BasePart") or not mainGround.CanCollide
+if needsFallback and not Workspace:FindFirstChild("NemezidaFallbackFloor") then
  local floor = Instance.new("Part")
  floor.Name = "NemezidaFallbackFloor"
  floor.Size = Vector3.new(96, 2, 96)
