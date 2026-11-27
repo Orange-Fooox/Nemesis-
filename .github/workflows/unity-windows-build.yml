@@ -27,7 +27,7 @@ jobs:
           test -f Unity/Packages/manifest.json
           test -f Unity/Assets/Editor/NemesisProjectBootstrap.cs
           mkdir -p dist
-          zip -qr dist/Nemesis-Unity-Project.zip Unity README.md CHANGELOG.md docs .gitignore \\
+          zip -qr dist/Nemesis-Unity-Project.zip Unity README.md CHANGELOG.md docs .gitignore -x "Unity/Library/*" "Unity/Temp/*" "Unity/Obj/*" "Unity/Build/*" "Unity/Logs/*" "Unity/UserSettings/*"
             -x "Unity/Library/*" "Unity/Temp/*" "Unity/Obj/*" "Unity/Build/*" "Unity/Logs/*" "Unity/UserSettings/*"
           sha256sum dist/Nemesis-Unity-Project.zip > dist/SHA256SUMS.txt
 
