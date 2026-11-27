@@ -244,7 +244,7 @@ public sealed class NemesisInfiniteWorld : MonoBehaviour
             SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = 120;
-            go.AddComponent<NemesisDepthSort>().baseOrder = 120;
+
 
             Rigidbody2D body = go.AddComponent<Rigidbody2D>();
             body.gravityScale = 0f;
@@ -359,5 +359,6 @@ public sealed class NemesisInfiniteWorld : MonoBehaviour
         }
     }
 }
+
 
 

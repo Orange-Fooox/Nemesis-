@@ -1,28 +1,20 @@
-# Asset Credits
+# Авторство и лицензии ассетов
 
-## Player character animation
-
-- **Warrior Character Size 128x160, isometric** by Jana Ochse / 2D!PIXX.
-- Source files: `Unity/Assets/ThirdParty/2DPIXXWarrior/`.
-- License: Creative Commons Attribution 4.0 International (CC BY 4.0), see `LICENSE_CC-BY-4.0.txt`.
-- Project use: idle, walk and attack sheets split into four directional frame sequences and recolored to the charcoal, ash and burgundy palette for *Печать бездны*.
-- Attribution: Jana Ochse, 2D!PIXX, https://www.2dpixx.de/
-- License text: https://creativecommons.org/licenses/by/4.0/
-
-## Catacombs environment and animated props
+## Catacombs: окружение и циклические эффекты
 
 - **RF_Catacombs** by Szadi Art.
-- Source files: `Unity/Assets/ThirdParty/NemesisCatacombs/`.
-- The included `public-license.txt` states that the pack is public domain and permits personal and commercial use.
-- Project use: modular dungeon tiles and frame sequences for torches, candles and retractable spikes.
+- Источник: папка Unity/Assets/ThirdParty/NemesisCatacombs/.
+- В комплекте сохранён public-license.txt, который обозначает набор как public domain и разрешает личное и коммерческое использование.
+- Использование в проекте: детали катакомб, кадры факела и свечей. В стартовой сцене включены только два умеренных цикла окружения.
 
-## Optional Cursed Land vegetation
+## Базовые наборы окружения
 
-- **Free Cursed Land Top Down Pixel Art Tileset**, supplied by the project owner.
-- Local path expected by the editor art pass: `Unity/Assets/ThirdParty/CursedLand/PNG/Objects_separetely/`.
-- Its source archive points to the CraftPix file license. The source files are intentionally excluded from the public Git repository; they must be supplied locally by the project owner.
-- Do not redistribute the original source archive or extracted source assets separately.
+- **NemesisFreeCC0**: готические, dungeon- и forest-спрайты.
+- Условия использования и сведения об источниках сохранены в соответствующих папках Unity/Assets/ThirdParty/NemesisFreeCC0/.
 
-## Other included assets
+## Исключённые и локальные наборы
 
-- Existing NemesisFreeCC0, Kenney and other third-party assets remain governed by the license and attribution files included alongside their source files.
+- Неподходящий превью-набор 2DPIXX был удалён из проекта и не используется.
+- **Free Cursed Land Top Down Pixel Art Tileset** от CraftPix не включён в публичный репозиторий и не используется активной стартовой сценой. Его исходные файлы не следует распространять отдельно; условия: https://craftpix.net/file-licenses/.
+
+При добавлении новых сторонних наборов проверяй лицензию до импорта в проект и до публикации файлов в Git.

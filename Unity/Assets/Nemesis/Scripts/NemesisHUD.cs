@@ -168,7 +168,7 @@ public class NemesisHUD : MonoBehaviour
         menuRect.anchoredPosition = Vector2.zero;
         menuRect.sizeDelta = Vector2.zero;
         Image overlay = menuRoot.AddComponent<Image>();
-        overlay.color = new Color(0.008f, 0.012f, 0.019f, 0.62f);
+        overlay.color = new Color(0.008f, 0.012f, 0.019f, 0.88f);
         menuRoot.SetActive(false);
 
         modalRoot = MakeRect(canvas.transform, "Modal Overlay", Vector2.zero, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero).gameObject;
@@ -298,7 +298,7 @@ public class NemesisHUD : MonoBehaviour
 
         RectTransform frame = MakePanel(menuRoot.transform, "Menu Frame", new Vector2(820, 850),
             new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero,
-            new Color(0.035f, 0.032f, 0.03f, 0.90f));
+            new Color(0.035f, 0.032f, 0.03f, 0.98f));
         if (cathedralSprite != null)
         {
             Image backdrop = AddImage(frame, "Cathedral Silhouette", cathedralSprite,
@@ -555,18 +555,15 @@ public class NemesisHUD : MonoBehaviour
         xp = 0;
         relics = 0;
         UpdateStats();
-
-        // Close the title menu before changing scenes. The HUD is persistent,
-        // so leaving this active used to keep the game paused behind it.
         modalRoot.SetActive(false);
         menuRoot.SetActive(false);
         inMenu = false;
         Time.timeScale = 1f;
         Cursor.visible = false;
-
         SceneManager.LoadScene("AshenOutskirts");
-        Time.timeScale = 1f;
-        SetMessage("\u041F\u0423\u0422\u042C \u041D\u0410\u0427\u0418\u041D\u0410\u0415\u0422\u0421\u042F");
+        if (NemesisPlayer.Instance != null)
+            NemesisPlayer.Instance.ResetForNewGame();
+        SetMessage("РџРЈРўР¬ РЎРљР’РћР—Р¬ РџР•РџР•Р› РќРђР§РРќРђР•РўРЎРЇ");
     }
     void ResumeGame()
     {
@@ -745,7 +742,6 @@ public class NemesisHUD : MonoBehaviour
         }
     }
 }
-
 
 
 

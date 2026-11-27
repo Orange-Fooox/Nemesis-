@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -34,7 +34,7 @@ public class NemesisPlayer : MonoBehaviour
     {
         Instance = this;
         body = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         heroAnimator = GetComponent<NemesisHeroAnimator>();
         health = maxHealth;
         spawnPosition = transform.position;

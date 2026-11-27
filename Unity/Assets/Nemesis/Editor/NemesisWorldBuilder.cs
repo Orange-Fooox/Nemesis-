@@ -114,7 +114,6 @@ public static class NemesisWorldBuilder
 
         NemesisUIAssetInstaller.Install();
         NemesisInfiniteWorldInstaller.Install();
-        NemesisCharacterAssetInstaller.Install();
 
         PathCells.Clear();
         Occupied.Clear();
@@ -197,9 +196,7 @@ public static class NemesisWorldBuilder
         AddProp("Ashen Candelabra", candelabra, new Vector2Int(10, 7), new Vector3(1.2f, 1.2f, 1f), false, 2);
         AddProp("Forgotten Wood Pile", woodPile, new Vector2Int(-5, -7), new Vector3(1.1f, 1.1f, 1f), false, 1);
         GameObject fire = AddProp("Wayfarer's Campfire", campfire, new Vector2Int(-4, -3), new Vector3(1.5f, 1.5f, 1f), false, 5);
-
-        Sprite heroSprite = Resources.Load<Sprite>("NemesisCharacters/Player/Idle/Down/00");
-        if (heroSprite == null) heroSprite = LoadSprite(F(Gothic, "characters/gothic-hooded-monk.png"), true);
+        Sprite heroSprite = LoadSprite(F(Gothic, "characters/gothic-hooded-monk.png"), true);
         Sprite keeperSprite = LoadSprite(F(Gothic, "characters/gothic-cathedral-keeper.png"), true);
         Sprite specter = LoadSprite(F(Gothic, "enemies/gothic-shadow-specter.png"), true);
         Sprite revenant = LoadSprite(F(Gothic, "enemies/gothic-bone-revenant.png"), true);
@@ -282,7 +279,6 @@ public static class NemesisWorldBuilder
     {
         NemesisUIAssetInstaller.Install();
         NemesisInfiniteWorldInstaller.Install();
-        NemesisCharacterAssetInstaller.Install();
         Build();
         NemesisDungeonSceneBuilder.Build();
         EditorBuildSettings.scenes = new[]
@@ -469,7 +465,7 @@ public static class NemesisWorldBuilder
 
         int placed = 0;
         int attempts = 0;
-        while (placed < 30 && attempts++ < 400)
+        while (placed < 42 && attempts++ < 400)
         {
             int x = Rng.Next(-15, 16);
             int y = Rng.Next(-11, 12);
@@ -489,7 +485,7 @@ public static class NemesisWorldBuilder
             placed++;
         }
 
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 18; i++)
         {
             int x = Rng.Next(-14, 15);
             int y = Rng.Next(-10, 11);
@@ -521,6 +517,10 @@ public static class NemesisWorldBuilder
         return enemy;
     }
 }
+
+
+
+
 
 
 

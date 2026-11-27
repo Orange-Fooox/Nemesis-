@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NemesisEnemy : MonoBehaviour
 {
@@ -29,7 +29,7 @@ public class NemesisEnemy : MonoBehaviour
 
     void LateUpdate()
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
         if (sr != null) sr.sortingOrder = 1000 - Mathf.RoundToInt(transform.position.y * 100f) + 7;
     }
 
