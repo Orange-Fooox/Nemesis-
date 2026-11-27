@@ -151,10 +151,10 @@ namespace Nemesis.World
             {
                 Vector2[] anchors =
                 {
-                    new Vector2(-37f, -31f), new Vector2(-37f, -21f), new Vector2(-20f, -37f),
-                    new Vector2(37f, -31f), new Vector2(37f, -21f), new Vector2(20f, -37f),
-                    new Vector2(-37f, 31f), new Vector2(-37f, 21f), new Vector2(-20f, 37f),
-                    new Vector2(37f, 31f), new Vector2(37f, 21f), new Vector2(20f, 37f)
+                    new Vector2(-36.5f, -31f), new Vector2(-36.5f, -21f), new Vector2(-23f, -36f),
+                    new Vector2(36.5f, -31f), new Vector2(36.5f, -21f), new Vector2(23f, -36f),
+                    new Vector2(-36.5f, 31f), new Vector2(-36.5f, 21f), new Vector2(-23f, 36f),
+                    new Vector2(36.5f, 31f), new Vector2(36.5f, 21f), new Vector2(23f, 36f)
                 };
 
                 string[] districtNames =
@@ -277,7 +277,7 @@ namespace Nemesis.World
                     new Vector3(1.6f, 8f, 1.6f), PrimitiveType.Cube, StoneColor);
                 Box("SoulGate_Lintel", p + new Vector3(0f, 8f, 0f),
                     new Vector3(7.7f, .9f, 1.6f), DarkStoneColor);
-                Box("SoulGate_RuneFrame", p + new Vector3(0f, 3.9f, -.45f),
+                VisualBox("SoulGate_RuneFrame", p + new Vector3(0f, 3.9f, -.45f),
                     new Vector3(3.5f, 6.3f, .16f), MagicColor);
                 AddPointLight(p + new Vector3(0f, 4f, -2.2f), new Color(.48f, .16f, .9f), 5f, 12f);
                 Box("SoulGate_Approach", p + new Vector3(0f, .1f, -4.2f),
@@ -291,16 +291,24 @@ namespace Nemesis.World
                     float angle = i * Mathf.PI * 2f / 18f;
                     float radius = Range(36.8f, 39.8f);
                     Vector3 p = new Vector3(Mathf.Cos(angle) * radius, 0f, Mathf.Sin(angle) * radius);
+                    if (Mathf.Abs(p.x) < 6f && p.z > 30f) continue; // Keep the Soul Gate approach clear.
                     SpawnProp("tree", "AshenTree_" + i, p,
                         new Vector3(2.6f, 4.3f, 2.6f), PrimitiveType.Sphere,
                         new Color(.16f, .22f, .16f));
                 }
 
-                for (int i = 0; i < 8; i++)
+                Vector2[] ruinAnchors =
                 {
-                    float x = Range(-35f, 35f);
-                    float z = Range(-35f, 35f);
-                    if (Mathf.Abs(x) < 8f || Mathf.Abs(z) < 8f || z > 27f) continue;
+                    new Vector2(-11f, -26f), new Vector2(11f, -26f),
+                    new Vector2(-11f, 26f), new Vector2(11f, 26f),
+                    new Vector2(-27f, -10f), new Vector2(27f, -10f),
+                    new Vector2(-27f, 10f), new Vector2(27f, 10f)
+                };
+
+                for (int i = 0; i < ruinAnchors.Length; i++)
+                {
+                    float x = ruinAnchors[i].x + Range(-1.3f, 1.3f);
+                    float z = ruinAnchors[i].y + Range(-1.3f, 1.3f);
                     SpawnProp("pillar", "OuterRuin_" + i, new Vector3(x, 0f, z),
                         new Vector3(.9f, Range(1.3f, 2.8f), .9f), PrimitiveType.Cube, DarkStoneColor);
                 }
@@ -342,8 +350,11 @@ namespace Nemesis.World
                 }
                 else
                 {
+                    Vector3 primitiveScale = fallbackScale;
+                    if (fallbackType == PrimitiveType.Cylinder)
+                        primitiveScale.y *= .5f;
                     instance = CreatePrimitive(name, fallbackType, ground + Vector3.up * (fallbackScale.y * .5f),
-                        fallbackScale, fallbackColor);
+                        primitiveScale, fallbackColor);
                 }
 
                 instance.transform.SetParent(root, true);
@@ -375,6 +386,13 @@ namespace Nemesis.World
             {
                 GameObject obj = CreatePrimitive(name, PrimitiveType.Cube, position, scale, color);
                 obj.transform.localRotation = rotation;
+            }
+
+            private void VisualBox(string name, Vector3 position, Vector3 size, Color color)
+            {
+                GameObject obj = CreatePrimitive(name, PrimitiveType.Cube, position, size, color);
+                Collider collider = obj.GetComponent<Collider>();
+                if (collider != null) UnityEngine.Object.Destroy(collider);
             }
 
             private void Cylinder(string name, Vector3 position, Vector3 size, Color color)
