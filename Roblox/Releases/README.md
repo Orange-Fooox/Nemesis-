@@ -1,24 +1,22 @@
 # Roblox Studio releases
 
-## Текущая dev-сборка: v0.4-dev.6
+## Последняя сборка, опубликованная в GitHub: v0.4-dev.6
 
-[NEMEZIDA_Studio_v0_4_dev6.rbxlx](NEMEZIDA_Studio_v0_4_dev6.rbxlx)
+[Скачать NEMEZIDA_Studio_v0_4_dev6.rbxlx](NEMEZIDA_Studio_v0_4_dev6.rbxlx)
 
-**Запуск без команд:** скачай Place-файл, открой в Roblox Studio и нажми Play (F5). Серверный Bootstrap автоматически создаёт хаб, безопасную точку появления и противников, после чего загружает персонажа. Command Bar не нужен.
+Это единственный Place-файл, оставленный в каталоге Releases. Предыдущие бинарные сборки удалены из текущей ветки, чтобы не путать их с актуальной.
+
+**Запуск:** скачай Place-файл, открой в Roblox Studio через **File → Open from File** и нажми **Play (F5)**. Серверный Bootstrap автоматически создаёт хаб, безопасную точку появления и противников. Command Bar не нужен.
 
 В v0.4-dev.6 исправлена синтаксическая ошибка NemesisService, из-за которой падала загрузка CombatService и Bootstrap. После этого серверная инициализация создаёт NemezidaRemotes, которые ожидают клиентские скрипты.
 
 Содержит 12 объектов скриптов: 7 ModuleScript, 1 Script и 4 LocalScript. Проверка ограничена статической сверкой XML и исходников. Roblox Studio, Luau compiler, Rojo CLI и Play session не запускались. Это dev-прототип, runtime-поведение нужно подтвердить в Studio.
 
-Автотест (не требуется для обычного запуска): Tests/STUDIO_WORLD_SPAWN_TEST.lua. Инструкция: Roblox/BUILD_AND_TEST.md.
+## Более поздние материалы разработки
 
-## Предыдущий dev-срез: v0.4-dev.4
+- [DEVLOG v0.4.1 — First playable combat & dungeon pass](../../docs/DEVLOG_v0_4_1.md): описывает отдельную сборку с первым проходом боя, подземельем и NPC. Сам Place-файл в GitHub не опубликован.
+- [DEVLOG v0.4.2 — Forest Grove integration](../../docs/DEVLOG_v0_4_2.md): описывает интеграцию 57 моделей лесного окружения в отдельный Place-файл, переданный в чате. Файл также не опубликован в GitHub.
 
-[NEMEZIDA_Studio_v0_4_dev4.rbxlx](NEMEZIDA_Studio_v0_4_dev4.rbxlx)
+Пока эти отдельные Place-файлы не загружены в репозиторий, единственной доступной для скачивания сборкой остаётся v0.4-dev.6.
 
-
-## Подготовленная asset-сборка: Forest Grove (2026-11-27)
-
-Файл `NEMEZIDA_Forest_Grove_Integrated.rbxlx` подготовлен отдельно на основе переданного пользователем Place-файла. В нём добавлена папка `Workspace/NEMEZIDA - Forest Grove` с 57 моделями лесного окружения; ассеты Polygon Dungeon сохранены. Подробности и ограничения проверки: [DEVLOG v0.4.2](../../docs/DEVLOG_v0_4_2.md).
-
-**Статус публикации:** Place-файл передан пользователю в чате, но пока не загружен в этот GitHub-репозиторий. Текущая версия Place-файла, доступная непосредственно в репозитории, остаётся `NEMEZIDA_Studio_v0_4_dev6.rbxlx`. Новая сборка проверена статически как XML; запуск в Roblox Studio не выполнялся.
+Инструкция: [Roblox/BUILD_AND_TEST.md](../BUILD_AND_TEST.md).
