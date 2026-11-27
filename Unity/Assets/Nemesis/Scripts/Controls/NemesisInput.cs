@@ -13,7 +13,8 @@ namespace Nemesis.Controls
         ShadowDash,
         EarthRend,
         AbyssRelease,
-        Barrier
+        Barrier,
+        Interact
     }
 
     /// <summary>
@@ -94,6 +95,9 @@ namespace Nemesis.Controls
                 case NemesisInputAction.Barrier:
                     return (keyboard != null && keyboard.bKey.wasPressedThisFrame)
                         || (gamepad != null && gamepad.buttonEast.wasPressedThisFrame);
+                case NemesisInputAction.Interact:
+                    return (keyboard != null && keyboard.eKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.dpad.down.wasPressedThisFrame);
                 default:
                     return false;
             }
@@ -108,6 +112,7 @@ namespace Nemesis.Controls
                 case NemesisInputAction.EarthRend: return UnityEngine.Input.GetKeyDown(KeyCode.C);
                 case NemesisInputAction.AbyssRelease: return UnityEngine.Input.GetKeyDown(KeyCode.V);
                 case NemesisInputAction.Barrier: return UnityEngine.Input.GetKeyDown(KeyCode.B);
+                case NemesisInputAction.Interact: return UnityEngine.Input.GetKeyDown(KeyCode.E);
                 default: return false;
             }
 #endif
