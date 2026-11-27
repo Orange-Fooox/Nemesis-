@@ -1,7 +1,7 @@
 # NEMESIS: Печать Бездны
 
 <p align="center">
-  <img src="Roblox/Assets/nemesis-cover.jpg" alt="Nemesis: Печать Бездны — мрачный фэнтезийный мир, охотник и цитадель Бездны" width="100%">
+  <img src="nemesis-cover-fullhd.jpg" alt="Nemesis: Печать Бездны — мрачный фэнтезийный мир, охотник и цитадель Бездны" width="100%">
 </p>
 
 <p align="center">
