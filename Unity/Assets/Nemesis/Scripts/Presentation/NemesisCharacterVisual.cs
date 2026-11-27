@@ -111,6 +111,9 @@ namespace Nemesis.Presentation
             Collider[] colliders = instance.GetComponentsInChildren<Collider>(true);
             foreach (Collider item in colliders) item.enabled = false;
 
+            MonoBehaviour[] embeddedScripts = instance.GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (MonoBehaviour script in embeddedScripts) script.enabled = false;
+
             Renderer[] renderers = instance.GetComponentsInChildren<Renderer>(true);
             if (renderers.Length > 0)
             {
