@@ -144,6 +144,10 @@ namespace Nemesis.World
                     new Vector3(3.1f, 1.3f, 1.1f), WoodColor);
                 Box("Market_Stall_Canopy", new Vector3(-5.4f, 1.75f, -5.2f),
                     new Vector3(3.5f, .22f, 1.55f), new Color(.42f, .16f, .15f));
+                SpawnProp("barrel", "Market_Barrel_Left", new Vector3(-8.1f, 0f, -7.6f),
+                    new Vector3(.85f, 1.05f, .85f), PrimitiveType.Cylinder, WoodColor);
+                SpawnProp("crate", "Market_Crate_Right", new Vector3(-2.2f, 0f, -7.7f),
+                    new Vector3(.95f, .85f, .95f), PrimitiveType.Cube, new Color(.37f, .24f, .13f));
 
                 Torch("PlazaTorch_West", new Vector3(-9.7f, 0f, 0f));
                 Torch("PlazaTorch_East", new Vector3(9.7f, 0f, 0f));
