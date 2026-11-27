@@ -1,6 +1,7 @@
 using UnityEngine;
 using Nemesis.Combat;
 using Nemesis.Presentation;
+using Nemesis.AI;
 
 namespace Nemesis.Enemies
 {
@@ -12,7 +13,7 @@ namespace Nemesis.Enemies
         private Health targetHealth, ownHealth;
         private NemesisCharacterVisual visual;
         private float nextAttack;
-        private bool windingUp;
+        private bool windingUp; private bool adapted;
 
         public void Initialize(Transform player)
         {
@@ -22,7 +23,25 @@ namespace Nemesis.Enemies
         }
 
         private void OnDestroy(){if(ownHealth!=null)ownHealth.Damaged-=OnDamaged;}
-        private void OnDamaged(float amount){ if(visual!=null) visual.PlayAction("BossSlam",.45f); }
+        private void OnDamaged(float amount)
+        {
+            if (visual != null) visual.PlayAction("BossSlam", .45f);
+            if (adapted) return;
+            adapted = true;
+            switch (NemesisPlayerMemory.DominantStyle)
+            {
+                case NemesisPlayerStyle.Melee:
+                    if (ownHealth != null) ownHealth.SetDamageResistance(.12f);
+                    break;
+                case NemesisPlayerStyle.Abilities:
+                    moveSpeed *= 1.12f;
+                    attackCooldown *= .94f;
+                    break;
+                case NemesisPlayerStyle.Dodge:
+                    slamRadius += .65f;
+                    break;
+            }
+        }
 
         private void Update()
         {
