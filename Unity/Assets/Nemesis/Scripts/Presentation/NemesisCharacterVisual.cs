@@ -11,7 +11,7 @@ namespace Nemesis.Presentation
     /// </summary>
     public sealed class NemesisCharacterVisual : MonoBehaviour
     {
-        private Transform torso, head, leftArm, rightArm, leftLeg, rightLeg, weapon;
+        private Transform torso, head, leftArm, rightArm, leftLeg, rightLeg, weapon, weaponBlade;
         private Vector3 leftArmRest, rightArmRest, leftLegRest, rightLegRest;
         private Material cloth, metal, accent;
         private float gait;
@@ -51,7 +51,8 @@ namespace Nemesis.Presentation
             Part("ChestSigil", PrimitiveType.Sphere, new Vector3(0,1.25f,-.205f), new Vector3(.16f,.20f,.08f), accent);
             weapon = Part("Weapon_Handle", PrimitiveType.Cylinder, new Vector3(.77f,1.03f,0), new Vector3(.07f,.50f,.07f), metal);
             weapon.localRotation = Quaternion.Euler(0,0,-28);
-            Part("Weapon_Blade", PrimitiveType.Cube, new Vector3(.88f,1.43f,0), new Vector3(.12f,.66f,.045f), accent).localRotation=Quaternion.Euler(0,0,-28);
+            weaponBlade = Part("Weapon_Blade", PrimitiveType.Cube, new Vector3(.88f,1.43f,0), new Vector3(.12f,.66f,.045f), accent);
+            weaponBlade.localRotation = Quaternion.Euler(0,0,-28);
 
             if (style == NemesisCharacterStyle.Boss)
             {
@@ -63,6 +64,7 @@ namespace Nemesis.Presentation
             {
                 Part("Pack",PrimitiveType.Cube,new Vector3(0,1.18f,.28f),new Vector3(.48f,.62f,.30f),accent);
                 weapon.gameObject.SetActive(false);
+                weaponBlade.gameObject.SetActive(false);
             }
 
             AttachImportedEquipment(style);
@@ -75,8 +77,13 @@ namespace Nemesis.Presentation
 
             if (style == NemesisCharacterStyle.Raider)
             {
-                AttachImported(catalog.FindPrefab("dagger"), "Imported_Dagger",
+                bool hasDagger = AttachImported(catalog.FindPrefab("dagger"), "Imported_Dagger",
                     new Vector3(.48f, 1.0f, -.08f), new Vector3(0f, 0f, -18f), .85f);
+                if (hasDagger)
+                {
+                    if (weapon != null) weapon.gameObject.SetActive(false);
+                    if (weaponBlade != null) weaponBlade.gameObject.SetActive(false);
+                }
                 return;
             }
 
@@ -95,13 +102,17 @@ namespace Nemesis.Presentation
                 AttachImported(catalog.FindPrefab("shield"), "Imported_Shield",
                     new Vector3(-.62f, 1.05f, -.02f), new Vector3(0f, 0f, 90f), .78f);
 
-            if (hasWeapon && weapon != null) weapon.gameObject.SetActive(false);
+            if (hasWeapon)
+            {
+                if (weapon != null) weapon.gameObject.SetActive(false);
+                if (weaponBlade != null) weaponBlade.gameObject.SetActive(false);
+            }
         }
 
         private bool AttachImported(GameObject prefab, string objectName, Vector3 localAnchor,
             Vector3 localEuler, float targetSize)
         {
-            if (prefab == null) return false;
+            if (prefab == null || prefab.GetComponentInChildren<Renderer>(true) == null) return false;
 
             GameObject instance = Instantiate(prefab, transform, false);
             instance.name = objectName;
