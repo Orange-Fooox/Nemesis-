@@ -70,7 +70,7 @@ namespace Nemesis.EditorTools
                 Directory.CreateDirectory(directory);
 
             Scene scene = EditorSceneManager.NewScene(
-                NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+                NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
             var bootstrap = new GameObject("NemesisBootstrap");
             bootstrap.AddComponent<Nemesis.Bootstrap.NemesisBootstrap>();
