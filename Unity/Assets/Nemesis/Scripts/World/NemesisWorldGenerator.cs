@@ -135,7 +135,7 @@ namespace Nemesis.World
 
                 Box("Plaza_Well_Base", new Vector3(5.6f, .42f, -5.4f),
                     new Vector3(2.2f, .8f, 2.2f), StoneColor);
-                Cylinder("Plaza_Well_Rim", new Vector3(5.6f, .9f, -5.4f),
+                Cylinder("Plaza_Well_Rim", new Vector3(5.6f, 1.32f, -5.4f),
                     new Vector3(1.9f, .3f, 1.9f), new Color(.43f, .40f, .36f));
 
                 Box("Market_Stall_Counter", new Vector3(-5.4f, .65f, -5.2f),
@@ -151,10 +151,10 @@ namespace Nemesis.World
             {
                 Vector2[] anchors =
                 {
-                    new Vector2(-25f, -25f), new Vector2(-34f, -22f), new Vector2(-23f, -34f),
-                    new Vector2(25f, -25f), new Vector2(34f, -22f), new Vector2(23f, -34f),
-                    new Vector2(-25f, 25f), new Vector2(-34f, 22f), new Vector2(-23f, 34f),
-                    new Vector2(25f, 25f), new Vector2(34f, 22f), new Vector2(23f, 34f)
+                    new Vector2(-37f, -31f), new Vector2(-37f, -21f), new Vector2(-20f, -37f),
+                    new Vector2(37f, -31f), new Vector2(37f, -21f), new Vector2(20f, -37f),
+                    new Vector2(-37f, 31f), new Vector2(-37f, 21f), new Vector2(-20f, 37f),
+                    new Vector2(37f, 31f), new Vector2(37f, 21f), new Vector2(20f, 37f)
                 };
 
                 string[] districtNames =
@@ -377,9 +377,11 @@ namespace Nemesis.World
                 obj.transform.localRotation = rotation;
             }
 
-            private void Cylinder(string name, Vector3 position, Vector3 scale, Color color)
+            private void Cylinder(string name, Vector3 position, Vector3 size, Color color)
             {
-                CreatePrimitive(name, PrimitiveType.Cylinder, position, scale, color);
+                // Unity's built-in cylinder is two units tall, while box dimensions are one unit per scale.
+                size.y *= .5f;
+                CreatePrimitive(name, PrimitiveType.Cylinder, position, size, color);
             }
 
             private void Sphere(string name, Vector3 position, Vector3 scale, Color color)
