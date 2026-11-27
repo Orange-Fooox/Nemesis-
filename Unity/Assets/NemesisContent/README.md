@@ -1,31 +1,36 @@
 # Nemesis prototype and imported asset library
 
-## Included imported pack
+## Bundled imported pack: Kenney Mini Dungeon 2.0
 
-The source-archive workflow downloads **Kenney Mini Dungeon 2.0** from the creator's official download URL and extracts it into:
+The source-archive workflow downloads the original Kenney 2.0 model set from a pinned public mirror and extracts it into:
 
 `Assets/NemesisContent/Imported/KenneyMiniDungeon/`
 
+It includes 30 GLB models: animated human and orc characters, a chest, gate, walls, floor pieces, column, stairs, barrel, shield variants, sword, spear, coins, potions and dungeon props, plus the shared colormap and original `License.txt`.
+
 - Creator: Kenney
-- License: **Creative Commons CC0 1.0 Universal**
-- Official asset page: https://kenney.nl/assets/mini-dungeon
-- Official download URL: https://kenney.nl/media/pages/assets/mini-dungeon/6cd72dc849-1785314274/kenney_mini-dungeon.zip
-- Scope: 30 low-poly 3D objects for dungeon and roguelike games, including environment pieces, props, weapons and shields.
-- Optional credit: "Mini Dungeon by Kenney". Credit is not required by CC0.
+- Original pack page: https://kenney.nl/assets/mini-dungeon
+- License: **Creative Commons Zero 1.0 Universal (CC0)**
+- Creator license included in the asset folder: `License.txt`
+- Optional credit: "Mini Dungeon by Kenney (kenney.nl) — CC0"
 
-The workflow checks that 3D model files exist before it creates the Unity ZIP. The extracted source files and an `ASSET_SOURCE.md` provenance note travel with the archive. The pack is downloaded during packaging rather than stored as a large binary commit in the Git history.
+The official Kenney page marks the pack CC0. The original license file states the models may be used for personal, educational and commercial purposes, with attribution optional. The GitHub mirror is used as a stable download endpoint because the creator's direct CDN returned HTTP 403 to the CI runner; the downloaded models remain the original Kenney content and the upstream license file is retained.
 
-## Importing the assets into the runtime catalog
+## GLB import support
+
+Unity's official glTFast package (`com.unity.cloud.gltfast`) is pinned in `Packages/manifest.json`. It imports `.glb` files as native Unity assets. The shared colormap is kept in the same relative folder structure as the models.
+
+## Indexing imported assets
 
 After opening the project and allowing Unity to import the models:
 
 1. Run **Tools → Nemesis → Scan Imported Asset Packs**.
-2. The scanner indexes Prefab and Model assets, including content under `Assets/NemesisContent/Imported/`.
+2. The scanner indexes Prefab and Model assets, and explicitly includes GLB/GLTF assets under `Assets/NemesisContent/Imported/`.
 3. It writes the runtime catalog to `Assets/Resources/NemesisAssetCatalog.asset`.
 4. It writes a report to `Assets/NemesisContent/ImportedAssetReport.md`.
-5. The world generator uses safe matching assets for eligible props (for example, columns, chests, barrels and crates), with generated fallback visuals retained.
+5. Eligible world and equipment props use matched models; generated fallback visuals remain active for unsupported categories.
 
-The scanner skips visuals with embedded custom MonoBehaviour scripts or without a Renderer. It only indexes content that is already present; it does not download packages or bypass their licenses.
+The scanner skips visuals with embedded custom MonoBehaviour scripts or without a Renderer. It only indexes content already imported by Unity; it does not execute third-party package scripts.
 
 ## Original generated prototype assets
 
@@ -33,8 +38,8 @@ The Editor generator creates local prototype prefabs and materials under:
 - `Assets/NemesisContent/Prefabs/`
 - `Assets/NemesisContent/Materials/`
 
-They include an armored player, ash raider, Ashen Warlord, merchant, weapons, armor and environment pieces. These primitive-based greybox assets remain safe fallbacks when no imported model matches.
+These include an armored player, ash raider, Ashen Warlord, merchant, equipment and environment pieces. They remain fallbacks for categories not covered by the imported models.
 
 ## Future content
 
-Additional packs should be added only when the creator's own source page documents a compatible license. Keep their original source and license notices adjacent to their extracted files under `Assets/NemesisContent/Imported/PackageName/`. A $0 Asset Store price alone does not grant redistribution rights.
+More packs can be added after the creator's source page and license have been checked. Keep each source's original license and provenance note beside the imported files under `Assets/NemesisContent/Imported/PackageName/`.
