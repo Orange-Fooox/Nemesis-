@@ -2,7 +2,9 @@
 
 ## Текущий Place-файл
 
-Готовый XML Place для Roblox Studio находится в Roblox/Releases/NEMEZIDA_Studio_v0_4_dev4.rbxlx.
+**Важно: для обычного запуска команды не нужны.** Нажми только Play (F5). Script `ServerScriptService/Bootstrap` сам генерирует мир, ставит точку спавна, создаёт врагов и загружает персонажа. Файл `Tests/STUDIO_WORLD_SPAWN_TEST.lua` нужен только для дополнительной диагностики, не для старта.
+
+Готовый XML Place для Roblox Studio находится в Roblox/Releases/NEMEZIDA_Studio_v0_4_dev5.rbxlx.
 
 1. Скачай файл из GitHub.
 2. В Roblox Studio выбери File → Open from File и укажи .rbxlx.
