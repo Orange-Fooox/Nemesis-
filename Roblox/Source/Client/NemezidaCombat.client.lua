@@ -106,11 +106,11 @@ UserInputService.InputBegan:Connect(function(input,processed)
  local ability=keyAbilities[input.KeyCode]
  if ability then
   local enemy=enemyFromTarget(mouse.Target)
+  if ability~="Barrier" then task.spawn(playSwing,"heavy") end
   if ability=="Barrier" or ability=="ShadowDash" then
    abilityRemote:FireServer(ability,enemy)
   elseif enemy then
-   if ability~="Barrier" then task.spawn(playSwing,"heavy") end
-  abilityRemote:FireServer(ability,enemy)
+   abilityRemote:FireServer(ability,enemy)
   end
  end
 end)
