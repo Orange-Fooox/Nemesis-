@@ -7,12 +7,12 @@ local SIZE = 420
 local HALF = SIZE / 2
 local SPAWN_POSITION = Vector3.new(0, 0, 165)
 local ENEMY_SPAWN_POSITIONS = {
- Vector3.new(-175, 0, -175),
- Vector3.new(175, 0, -175),
- Vector3.new(-175, 0, 175),
- Vector3.new(175, 0, 175),
- Vector3.new(0, 0, -185),
- Vector3.new(185, 0, 0),
+ Vector3.new(-58, 0, 72),
+ Vector3.new(58, 0, 72),
+ Vector3.new(-58, 0, -68),
+ Vector3.new(58, 0, -68),
+ Vector3.new(0, 0, -98),
+ Vector3.new(0, 0, 112),
 }
 
 local function makePart(parent: Instance, name: string, size: Vector3, cf: CFrame, color: Color3, material: Enum.Material): Part

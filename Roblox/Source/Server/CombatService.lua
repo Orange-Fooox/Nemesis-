@@ -141,6 +141,8 @@ function CombatService.Init()
  attack.Name="BasicAttack"; attack.Parent=folder
  local ability=folder:FindFirstChild("UseAbility") or Instance.new("RemoteEvent")
  ability.Name="UseAbility"; ability.Parent=folder
+ local notice=folder:FindFirstChild("ShowNotice") or Instance.new("RemoteEvent")
+ notice.Name="ShowNotice"; notice.Parent=folder
  attack.OnServerEvent:Connect(function(player,target)
   if typeof(target)=="Instance" then CombatService.BasicAttack(player,target) end
  end)
