@@ -148,7 +148,10 @@ namespace Nemesis.Presentation
         {
             GameObject go=GameObject.CreatePrimitive(type);
             go.name=partName; go.transform.SetParent(transform,false);
-            go.transform.localPosition=position; go.transform.localScale=scale;
+            go.transform.localPosition=position;
+            go.transform.localScale = type == PrimitiveType.Cylinder
+                ? new Vector3(scale.x, scale.y * .5f, scale.z)
+                : scale;
             var collider=go.GetComponent<Collider>();
             if(collider!=null)
             {
