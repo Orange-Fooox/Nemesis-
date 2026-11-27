@@ -31,7 +31,7 @@ Config.Enemies = {
 }
 Config.World = {HubSize=420, EnemyPopulation=6, RubbleCount=90, SpawnPosition=Vector3.new(0,5,165)}
 return Config
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemezidaConfig</string></Properties></Item></Item></Item></Item>
+]]></ProtectedString><string name="Name">NemezidaConfig</string></Properties></Item></Item></Item></Item>
 <Item class="ServerScriptService" referent="RBX00000000000000000000000000000013"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Folder" referent="RBX00000000000000000000000000000011"><Properties><string name="Name">Services</string></Properties><Item class="ModuleScript" referent="RBX00000000000000000000000000000005"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/CombatService
 local Players = game:GetService("Players")
@@ -186,7 +186,7 @@ function CombatService.Init()
  Players.PlayerRemoving:Connect(function(player) lastAttack[player]=nil; lastAbility[player]=nil end)
 end
 return CombatService
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">CombatService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000006"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">CombatService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000006"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/EnemyAIService
 -- Tagged NPCs remain neutral until a player damages/provokes them.
 local Players=game:GetService("Players")
@@ -349,7 +349,7 @@ function Service.Init()
  end)
 end
 return Service
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">EnemyAIService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000007"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">EnemyAIService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000007"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/HubGenerator
 -- Deterministic greybox generator for the Ashen Frontier.
 local Workspace = game:GetService("Workspace")
@@ -520,7 +520,7 @@ function HubGenerator.GetSpawnCFrame(): CFrame
 end
 
 return HubGenerator
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">HubGenerator</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000008"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">HubGenerator</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000008"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/NemesisService
 -- Server-owned, intentionally bounded adaptation data.
 local Players=game:GetService("Players")
@@ -578,7 +578,7 @@ function NemesisService.GetThreatState()
 end
 Players.PlayerRemoving:Connect(function(player) memory[player.UserId]=nil end)
 return NemesisService
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemesisService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000009"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">NemesisService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000009"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/MovementService
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
@@ -670,7 +670,7 @@ function Service.Init()
  Players.PlayerRemoving:Connect(function(player) lastRequest[player]=nil end)
 end
 return Service
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">MovementService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000010"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">MovementService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000010"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/PopulationService
 -- Creates a deterministic set of simple R6 enemy rigs for the current hub.
 local Workspace = game:GetService("Workspace")
@@ -795,7 +795,7 @@ function PopulationService.Init(seed: number?)
 end
 
 return PopulationService
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">PopulationService</string></Properties></Item></Item><Item class="Script" referent="RBX00000000000000000000000000000012"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">PopulationService</string></Properties></Item></Item><Item class="Script" referent="RBX00000000000000000000000000000012"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- Script: ServerScriptService/Bootstrap
 -- World generation and safe spawn complete before the first character loads.
 local Players = game:GetService("Players")
