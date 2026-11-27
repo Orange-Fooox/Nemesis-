@@ -13,6 +13,7 @@ Target: Unity 6 (6000.0.85f2)
 - [x] Ashen Warlord boss prototype with telegraphed area attack.
 - [x] Procedural low-poly character, equipment and environment placeholder kit.
 - [x] Editor menu for asset library and prototype scene generation.
+- [x] First-run Editor bootstrap that creates the prototype scene and registers it in Build Settings.
 - [x] Editor catalog scanner for imported Prefab/Model assets.
 - [x] Local player combat telemetry and first bounded enemy adaptation response.
 - [x] Seeded Ashen Reach hub source: crossroads, central plaza, four districts, 12 buildings, landmarks and outer spawn points.
