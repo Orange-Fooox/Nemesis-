@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+  <External>null</External>
+  <External>nil</External>
+  <Item class="Workspace" referent="RBX00000000000000000000000000000019"><Properties><string name="Name">Workspace</string></Properties></Item>
+  <Item class="ReplicatedStorage" referent="RBX00000000000000000000000000000004"><Properties><string name="Name">ReplicatedStorage</string></Properties><Item class="Folder" referent="RBX00000000000000000000000000000003"><Properties><string name="Name">Nemezida</string></Properties><Item class="Folder" referent="RBX00000000000000000000000000000002"><Properties><string name="Name">Shared</string></Properties><Item class="ModuleScript" referent="RBX00000000000000000000000000000001"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+local Config = {}
+Config.Version = "0.4.0-dev.2"
+Config.Player = {MaxHealth=100, Attack=12, Defense=5, MaxStamina=100, MaxEssence=100, WalkSpeed=16, RunSpeed=23}
+Config.Combat = {BasicAttackMultiplier=1, CriticalMultiplier=1.5, DefenseFactor=0.35, AttackRange=9, AttackCooldown=0.65, EnemyAlertDuration=12, EnemyReturnDistance=4}
+Config.Movement = {StaminaDrainPerSecond=24, StaminaRegenPerSecond=16, SprintRequestInterval=0.15}
+Config.Abilities = {
+ SealStrike={Multiplier=1.8, EssenceCost=15, Cooldown=6, Range=11},
+ ShadowDash={Multiplier=1, EssenceCost=20, Cooldown=8, Range=13, DashImpulse=58},
+ EarthRend={Multiplier=2.5, EssenceCost=30, Cooldown=14, Range=12, Radius=10},
+ Barrier={EssenceCost=25, Cooldown=18, Duration=4, ShieldHealthPercent=0.30},
+ AbyssRelease={Multiplier=4, EssenceCost=60, Cooldown=45, Range=14, Vulnerability=0.10, VulnerabilityDuration=5},
+}
+Config.Enemies = {
+ GoblinScavenger={DisplayName="Гоблин-падальщик",MaxHealth=55,Attack=9,Defense=2,WalkSpeed=14,DetectionRange=18,AttackRange=5,AttackCooldown=1.8,XP=12},
+ BoneArcher={DisplayName="Костяной стрелок",MaxHealth=45,Attack=12,Defense=1,WalkSpeed=11,DetectionRange=26,AttackRange=24,AttackCooldown=2.5,XP=15},
+ WanderingShade={DisplayName="Блуждающая тень",MaxHealth=65,Attack=13,Defense=3,WalkSpeed=18,DetectionRange=22,AttackRange=6,AttackCooldown=4,XP=18},
+ AshenWolf={DisplayName="Пепельный волк",MaxHealth=80,Attack=15,Defense=3,WalkSpeed=20,DetectionRange=25,AttackRange=5,AttackCooldown=2.2,XP=20},
+}
+return Config
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemezidaConfig</string></Properties></Item></Item></Item></Item>
+  <Item class="ServerScriptService" referent="RBX00000000000000000000000000000012"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Folder" referent="RBX00000000000000000000000000000010"><Properties><string name="Name">Services</string></Properties><Item class="ModuleScript" referent="RBX00000000000000000000000000000005"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- ModuleScript: ServerScriptService/Services/CombatService
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+local CollectionService = game:GetService("CollectionService")
+local Config = require(ReplicatedStorage:WaitForChild("Nemezida"):WaitForChild("Shared"):WaitForChild("NemezidaConfig"))
+local NemesisService = require(ServerScriptService:WaitForChild("Services"):WaitForChild("NemesisService"))
+local CombatService = {}
+local lastAttack: {[Player]: number} = {}
+local lastAbility: {[Player]: {[string]: number}} = {}
+
+local function characterRoot(player: Player)
+ local character = player.Character
+ if not character then return nil end
+ local humanoid = character:FindFirstChildOfClass("Humanoid")
+ local root = character:FindFirstChild("HumanoidRootPart")
+ if not humanoid or humanoid.Health <= 0 or not root then return nil end
+ return character, humanoid, root
+end
+
+local function validEnemy(target: Instance?): Model?
+ if not target then return nil end
+ local model = if target:IsA("Model") then target else target:FindFirstAncestorOfClass("Model")
+ if model and CollectionService:HasTag(model,"NemezidaEnemy") then return model end
+ return nil
+end
+
+local function hasLineOfSight(originCharacter: Model, target: Model): boolean
+ local originRoot = originCharacter:FindFirstChild("HumanoidRootPart")
+ local targetRoot = target:FindFirstChild("HumanoidRootPart") or target.PrimaryPart
+ if not originRoot or not targetRoot then return false end
+ local origin = originRoot.Position + Vector3.new(0,1.5,0)
+ local direction = targetRoot.Position-origin
+ local params = RaycastParams.new()
+ params.FilterType = Enum.RaycastFilterType.Exclude
+ params.FilterDescendantsInstances = {originCharacter}
+ params.IgnoreWater = true
+ local result = workspace:Raycast(origin,direction,params)
+ return result == nil or result.Instance:IsDescendantOf(target)
+end
+
+local function applyDamage(player: Player, enemy: Model, multiplier: number, maxDistance: number): boolean
+ local character,_,root = characterRoot(player)
+ local humanoid = enemy:FindFirstChildOfClass("Humanoid")
+ if not character or not root or not humanoid or humanoid.Health <= 0 then return false end
+ if (enemy:GetPivot().Position-root.Position).Magnitude > maxDistance then return false end
+ if not hasLineOfSight(character,enemy) then return false end
+ local defense = enemy:GetAttribute("Defense") or 0
+ local attack = Config.Player.Attack + (player:GetAttribute("BonusAttack") or 0)
+ local damage = math.max(1,attack*multiplier-defense*Config.Combat.DefenseFactor)
+ local now = workspace:GetServerTimeNow()
+ if now < (enemy:GetAttribute("VulnerableUntil") or 0) then
+  damage *= 1 + (enemy:GetAttribute("VulnerabilityBonus") or 0)
+ end
+ enemy:SetAttribute("LastDamagedByUserId",player.UserId)
+ enemy:SetAttribute("ProvokedUntil",now+Config.Combat.EnemyAlertDuration)
+ humanoid:TakeDamage(damage)
+ return true
+end
+
+function CombatService.BasicAttack(player: Player,target: Instance)
+ local now = os.clock()
+ if now-(lastAttack[player] or 0) < Config.Combat.AttackCooldown then return end
+ local character,_,root = characterRoot(player)
+ local enemy = validEnemy(target)
+ if not character or not root or not enemy then return end
+ if (enemy:GetPivot().Position-root.Position).Magnitude > Config.Combat.AttackRange then return end
+ if not hasLineOfSight(character,enemy) then return end
+ if applyDamage(player,enemy,Config.Combat.BasicAttackMultiplier,Config.Combat.AttackRange) then
+  lastAttack[player]=now
+  NemesisService.RecordAction(player,"Melee")
+ end
+end
+
+function CombatService.UseAbility(player: Player,name: string,target: Instance?)
+ local ability = Config.Abilities[name]
+ local character,_,root = characterRoot(player)
+ if not ability or not character or not root then return end
+ lastAbility[player]=lastAbility[player] or {}
+ local now=os.clock()
+ if now-(lastAbility[player][name] or 0) < ability.Cooldown then return end
+ local essence=player:GetAttribute("Essence")
+ if essence==nil then essence=Config.Player.MaxEssence end
+ if essence < ability.EssenceCost then return end
+
+ local enemy = if name == "Barrier" then nil else validEnemy(target)
+ -- Shadow Dash remains usable when the cursor happens to be over a distant or occluded enemy.
+ if name == "ShadowDash" and enemy then
+  if (enemy:GetPivot().Position-root.Position).Magnitude > ability.Range or not hasLineOfSight(character,enemy) then
+   enemy=nil
+  end
+ end
+ if name ~= "Barrier" and name ~= "ShadowDash" and not enemy then return end
+ if enemy and (enemy:GetPivot().Position-root.Position).Magnitude > ability.Range then return end
+ if enemy and not hasLineOfSight(character,enemy) then return end
+
+ lastAbility[player][name]=now
+ player:SetAttribute("Essence",essence-ability.EssenceCost)
+ if name == "Barrier" then
+  NemesisService.RecordAction(player,"Block")
+ else
+  NemesisService.RecordAction(player,"Melee")
+ end
+
+ if name == "Barrier" then
+  local humanoid = character:FindFirstChildOfClass("Humanoid")
+  if not humanoid then return end
+  player:SetAttribute("BarrierHealth",humanoid.MaxHealth*ability.ShieldHealthPercent)
+  player:SetAttribute("BarrierUntil",workspace:GetServerTimeNow()+ability.Duration)
+  return
+ elseif name == "ShadowDash" then
+  local flat = Vector3.new(root.CFrame.LookVector.X,0,root.CFrame.LookVector.Z)
+  if flat.Magnitude < 0.01 then return end
+  root:ApplyImpulse(flat.Unit*root.AssemblyMass*ability.DashImpulse + Vector3.new(0,root.AssemblyMass*8,0))
+  if enemy then applyDamage(player,enemy,ability.Multiplier,ability.Range) end
+  return
+ elseif name == "EarthRend" then
+  local center = enemy:GetPivot().Position
+  for _,candidate in CollectionService:GetTagged("NemezidaEnemy") do
+   if candidate:IsA("Model") and candidate.Parent then
+    local distance=(candidate:GetPivot().Position-center).Magnitude
+    if distance <= ability.Radius then
+     applyDamage(player,candidate,ability.Multiplier,ability.Range+ability.Radius)
+    end
+   end
+  end
+  return
+ end
+
+ if enemy and applyDamage(player,enemy,ability.Multiplier,ability.Range) and ability.Vulnerability then
+  enemy:SetAttribute("VulnerableUntil",workspace:GetServerTimeNow()+ability.VulnerabilityDuration)
+  enemy:SetAttribute("VulnerabilityBonus",ability.Vulnerability)
+ end
+end
+
+function CombatService.Init()
+ local folder=ReplicatedStorage:FindFirstChild("NemezidaRemotes") or Instance.new("Folder")
+ folder.Name="NemezidaRemotes"; folder.Parent=ReplicatedStorage
+ local attack=folder:FindFirstChild("BasicAttack") or Instance.new("RemoteEvent")
+ attack.Name="BasicAttack"; attack.Parent=folder
+ local ability=folder:FindFirstChild("UseAbility") or Instance.new("RemoteEvent")
+ ability.Name="UseAbility"; ability.Parent=folder
+ attack.OnServerEvent:Connect(function(player,target)
+  if typeof(target)=="Instance" then CombatService.BasicAttack(player,target) end
+ end)
+ ability.OnServerEvent:Connect(function(player,name,target)
+  if typeof(name)=="string" and #name<=32 and (target==nil or typeof(target)=="Instance") then
+   CombatService.UseAbility(player,name,target)
+  end
+ end)
+ Players.PlayerRemoving:Connect(function(player) lastAttack[player]=nil; lastAbility[player]=nil end)
+end
+return CombatService
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">CombatService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000006"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- ModuleScript: ServerScriptService/Services/EnemyAIService
+-- Tagged NPCs remain neutral until a player damages/provokes them.
+local Players=game:GetService("Players")
+local CollectionService=game:GetService("CollectionService")
+local PathfindingService=game:GetService("PathfindingService")
+local ServerScriptService=game:GetService("ServerScriptService")
+local Config=require(game:GetService("ReplicatedStorage"):WaitForChild("Nemezida"):WaitForChild("Shared"):WaitForChild("NemezidaConfig"))
+local NemesisService=require(ServerScriptService:WaitForChild("Services"):WaitForChild("NemesisService"))
+local Service={}
+local states: {[Model]: any}={}
+local started=false
+
+local function playerParts(player: Player)
+ local c=player.Character
+ if not c then return nil end
+ local h=c:FindFirstChildOfClass("Humanoid")
+ local r=c:FindFirstChild("HumanoidRootPart")
+ if not h or h.Health<=0 or not r then return nil end
+ return c,h,r
+end
+
+local function register(model: Model)
+ if states[model] then return end
+ local h=model:FindFirstChildOfClass("Humanoid")
+ local root=model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart
+ if not h or not root then warn("Enemy missing Humanoid/root:",model:GetFullName()); return end
+ h.MaxHealth=model:GetAttribute("MaxHealth") or 55
+ h.Health=h.MaxHealth
+ h.WalkSpeed=model:GetAttribute("WalkSpeed") or 14
+ states[model]={home=model:GetPivot(),target=nil,nextAttack=0,nextPath=0,encounterPlayerId=nil}
+ h.Died:Connect(function() model:SetAttribute("AIState","Dead"); states[model]=nil end)
+end
+
+local function getProvoker(model: Model,position: Vector3): Player?
+ if workspace:GetServerTimeNow() > (model:GetAttribute("ProvokedUntil") or 0) then return nil end
+ local id=model:GetAttribute("LastDamagedByUserId")
+ if typeof(id)~="number" then return nil end
+ local p=Players:GetPlayerByUserId(id)
+ if not p then return nil end
+ local _,_,r=playerParts(p)
+ if not r then return nil end
+ if (r.Position-position).Magnitude > (model:GetAttribute("DetectionRange") or 18)*2 then return nil end
+ return p
+end
+
+local function moveTo(model: Model,h: Humanoid,goal: Vector3)
+ local root=model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart
+ if not root then return end
+ local path=PathfindingService:CreatePath({AgentRadius=2,AgentHeight=5,AgentCanJump=true})
+ local ok=pcall(function() path:ComputeAsync(root.Position,goal) end)
+ if ok and path.Status==Enum.PathStatus.Success then
+  local points=path:GetWaypoints()
+  if points[2] then h:MoveTo(points[2].Position); return end
+ end
+ h:MoveTo(goal)
+end
+
+local function hasLineOfSight(enemy: Model,targetCharacter: Model): boolean
+ local enemyRoot=enemy:FindFirstChild("HumanoidRootPart") or enemy.PrimaryPart
+ local targetRoot=targetCharacter:FindFirstChild("HumanoidRootPart")
+ if not enemyRoot or not targetRoot then return false end
+ local origin=enemyRoot.Position+Vector3.new(0,1.5,0)
+ local direction=targetRoot.Position-origin
+ local params=RaycastParams.new()
+ params.FilterType=Enum.RaycastFilterType.Exclude
+ params.FilterDescendantsInstances={enemy}
+ params.IgnoreWater=true
+ local result=workspace:Raycast(origin,direction,params)
+ return result==nil or result.Instance:IsDescendantOf(targetCharacter)
+end
+
+local function damagePlayer(player: Player,humanoid: Humanoid,amount: number)
+ local now=workspace:GetServerTimeNow()
+ local shield=player:GetAttribute("BarrierHealth") or 0
+ local barrierUntil=player:GetAttribute("BarrierUntil") or 0
+ if now < barrierUntil and shield > 0 then
+  local absorbed=math.min(shield,amount)
+  shield-=absorbed
+  amount-=absorbed
+  player:SetAttribute("BarrierHealth",shield)
+  if shield<=0 then player:SetAttribute("BarrierUntil",0) end
+ end
+ if amount>0 then humanoid:TakeDamage(amount) end
+end
+
+local function returnHome(model: Model,h: Humanoid,root: BasePart,s)
+ s.target=nil
+ s.encounterPlayerId=nil
+ model:SetAttribute("AIState","Return")
+ if (root.Position-s.home.Position).Magnitude > Config.Combat.EnemyReturnDistance then
+  if os.clock()>=s.nextPath then
+   s.nextPath=os.clock()+1
+   moveTo(model,h,s.home.Position)
+  end
+ else
+  model:SetAttribute("AIState","Idle")
+ end
+end
+
+local function update(model: Model,s)
+ local h=model:FindFirstChildOfClass("Humanoid")
+ local root=model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart
+ if not h or h.Health<=0 or not root then return end
+ local now=workspace:GetServerTimeNow()
+
+ -- Expiry always ends the encounter, even if the player is standing beside the NPC.
+ if s.target and now>(model:GetAttribute("ProvokedUntil") or 0) then
+  returnHome(model,h,root,s)
+  return
+ end
+ if not s.target or not playerParts(s.target) then
+  s.target=getProvoker(model,root.Position)
+ end
+ if not s.target then
+  if (root.Position-s.home.Position).Magnitude > Config.Combat.EnemyReturnDistance then
+   returnHome(model,h,root,s)
+  else
+   model:SetAttribute("AIState","Idle")
+  end
+  return
+ end
+
+ local targetPlayer=s.target :: Player
+ if s.encounterPlayerId~=targetPlayer.UserId then
+  s.encounterPlayerId=targetPlayer.UserId
+  NemesisService.RecordEncounter(targetPlayer)
+ end
+ local targetCharacter,targetHumanoid,targetRoot=playerParts(targetPlayer)
+ if not targetCharacter or not targetHumanoid or not targetRoot then
+  s.target=nil; s.encounterPlayerId=nil; return
+ end
+ local distance=(targetRoot.Position-root.Position).Magnitude
+ local range=model:GetAttribute("AttackRange") or 5
+ model:SetAttribute("AIState","Combat")
+ if distance>range or not hasLineOfSight(model,targetCharacter) then
+  if os.clock()>=s.nextPath then s.nextPath=os.clock()+1; moveTo(model,h,targetRoot.Position) end
+ elseif os.clock()>=s.nextAttack then
+  s.nextAttack=os.clock()+(model:GetAttribute("AttackCooldown") or 1.8)
+  local attack=model:GetAttribute("Attack") or 9
+  local defense=targetPlayer:GetAttribute("Defense") or Config.Player.Defense
+  damagePlayer(targetPlayer,targetHumanoid,math.max(1,attack-defense*Config.Combat.DefenseFactor))
+ end
+end
+
+function Service.Init()
+ if started then return end
+ started=true
+ for _,item in CollectionService:GetTagged("NemezidaEnemy") do if item:IsA("Model") then register(item) end end
+ CollectionService:GetInstanceAddedSignal("NemezidaEnemy"):Connect(function(item) if item:IsA("Model") then register(item) end end)
+ task.spawn(function()
+  while started do
+   for model,state in states do
+    if model.Parent then
+     local ok,err=pcall(update,model,state)
+     if not ok then warn("[Nemezida AI]",model:GetFullName(),err) end
+    else states[model]=nil end
+   end
+   task.wait(0.25)
+  end
+ end)
+end
+return Service
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">EnemyAIService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000007"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- ModuleScript: ServerScriptService/Services/HubGenerator
+-- Generates a deterministic greybox hub. Art pass and bespoke building models come later.
+local Workspace=game:GetService("Workspace")
+local HubGenerator={}
+local SIZE=420
+local HALF=SIZE/2
+local function part(parent: Instance,name: string,size: Vector3,cf: CFrame,color: Color3,material: Enum.Material)
+ local p=Instance.new("Part")
+ p.Name=name; p.Size=size; p.CFrame=cf; p.Anchored=true
+ p.Color=color; p.Material=material; p.TopSurface=Enum.SurfaceType.Smooth; p.BottomSurface=Enum.SurfaceType.Smooth
+ p.Parent=parent
+ return p
+end
+local function block(rng: Random,parent: Instance,name: string,x: number,z: number)
+ local w=rng:NextInteger(18,30)
+ local d=rng:NextInteger(18,30)
+ local h=rng:NextInteger(12,28)
+ local base=part(parent,name,Vector3.new(w,h,d),CFrame.new(x,h/2,z),Color3.fromRGB(42,42,48),Enum.Material.Slate)
+ base:SetAttribute("GeneratedBuilding",true)
+ local roof=part(parent,name.."_Roof",Vector3.new(w+2,2,d+2),CFrame.new(x,h+1,z),Color3.fromRGB(22,22,28),Enum.Material.Metal)
+ roof:SetAttribute("GeneratedDecoration",true)
+end
+function HubGenerator.Generate(seed: number?)
+ local actualSeed=seed or 847291
+ local rng=Random.new(actualSeed)
+ local old=Workspace:FindFirstChild("NemezidaGeneratedHub")
+ if old then old:Destroy() end
+ local root=Instance.new("Folder"); root.Name="NemezidaGeneratedHub"; root.Parent=Workspace
+ root:SetAttribute("WorldSeed",actualSeed); root:SetAttribute("GeneratorVersion","0.4.0-dev.1")
+ part(root,"AshenGround",Vector3.new(SIZE,2,SIZE),CFrame.new(0,-1,0),Color3.fromRGB(55,53,52),Enum.Material.Slate)
+ -- Outer boundary.
+ for _,entry in {{0,-HALF, SIZE,8},{0,HALF,SIZE,8},{-HALF,0,8,SIZE},{HALF,0,8,SIZE}} do
+  local x,z,w,d=entry[1],entry[2],entry[3],entry[4]
+  part(root,"PerimeterWall",Vector3.new(w,18,d),CFrame.new(x,9,z),Color3.fromRGB(25,25,30),Enum.Material.Basalt)
+ end
+ -- Crossroads and protected central square.
+ part(root,"NorthSouthRoad",Vector3.new(18,0.25,SIZE-20),CFrame.new(0,0.15,0),Color3.fromRGB(75,70,66),Enum.Material.Cobblestone)
+ part(root,"EastWestRoad",Vector3.new(SIZE-20,0.25,18),CFrame.new(0,0.16,0),Color3.fromRGB(75,70,66),Enum.Material.Cobblestone)
+ part(root,"CentralSquare",Vector3.new(60,0.5,60),CFrame.new(0,0.25,0),Color3.fromRGB(90,82,70),Enum.Material.Cobblestone)
+ -- District blocks: market, shrine, ruined homes and corrupted outskirts.
+ local slots={
+  {95,75},{135,115},{-95,75},{-135,115},
+  {95,-75},{135,-115},{-95,-75},{-135,-115},
+  {65,155},{-65,155},{65,-155},{-65,-155},
+ }
+ for i,slot in slots do
+  local x=slot[1]+rng:NextInteger(-8,8)
+  local z=slot[2]+rng:NextInteger(-8,8)
+  block(rng,root,"RuinedBuilding_"..i,x,z)
+ end
+ -- Scattered ash-covered stone debris, capped for predictable server cost.
+ for i=1,90 do
+  local x=rng:NextInteger(-195,195)
+  local z=rng:NextInteger(-195,195)
+  if math.abs(x)>38 or math.abs(z)>38 then
+   local s=rng:NextInteger(2,6)
+   part(root,"AshenRubble",Vector3.new(s,s,s),CFrame.new(x,s/2,z)*CFrame.Angles(0,rng:NextNumber(0,math.pi),rng:NextNumber(-0.2,0.2)),Color3.fromRGB(48,46,46),Enum.Material.Rock)
+  end
+ end
+ -- Spawn point is kept clear at the southern approach to the plaza.
+ local spawn=Instance.new("SpawnLocation")
+ spawn.Name="NemezidaSpawn"; spawn.Size=Vector3.new(8,1,8); spawn.CFrame=CFrame.new(0,1,165)
+ spawn.Anchored=true; spawn.Neutral=true; spawn.Duration=0; spawn.Transparency=0.25
+ spawn.Color=Color3.fromRGB(95,65,125); spawn.Material=Enum.Material.Neon; spawn.Parent=root
+ return root
+end
+return HubGenerator
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">HubGenerator</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000008"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- ModuleScript: ServerScriptService/Services/NemesisService
+-- Server-owned, intentionally bounded adaptation data.
+local Players=game:GetService("Players")
+local NemesisService={}
+local memory: {[number]: {melee: number,ranged: number,dodges: number,blocks: number,encounters: number}}={}
+local regionalThreat=0
+local function getMemory(player: Player)
+ local data=memory[player.UserId]
+ if not data then
+  data={melee=0,ranged=0,dodges=0,blocks=0,encounters=0}
+  memory[player.UserId]=data
+ end
+ return data
+end
+function NemesisService.RecordAction(player: Player,action: string)
+ local data=getMemory(player)
+ if action=="Melee" then data.melee+=1
+ elseif action=="Ranged" then data.ranged+=1
+ elseif action=="Dodge" then data.dodges+=1
+ elseif action=="Block" then data.blocks+=1
+ end
+end
+function NemesisService.RecordEncounter(player: Player)
+ local data=getMemory(player); data.encounters+=1
+end
+function NemesisService.GetProfile(player: Player)
+ local data=getMemory(player)
+ local total=math.max(1,data.melee+data.ranged)
+ return {
+  MeleeRatio=data.melee/total,
+  RangedRatio=data.ranged/total,
+  DodgeCount=data.dodges,
+  BlockCount=data.blocks,
+  Encounters=data.encounters,
+ }
+end
+function NemesisService.AddRegionalThreat(amount: number)
+ regionalThreat=math.clamp(regionalThreat+math.floor(amount),0,100)
+ return regionalThreat
+end
+function NemesisService.ReduceRegionalThreat(amount: number)
+ regionalThreat=math.clamp(regionalThreat-math.floor(amount),0,100)
+ return regionalThreat
+end
+function NemesisService.GetRegionalThreat()
+ return regionalThreat
+end
+function NemesisService.GetThreatState()
+ if regionalThreat>=100 then return "RegionalEvent"
+ elseif regionalThreat>=80 then return "Invasion"
+ elseif regionalThreat>=60 then return "EliteThreats"
+ elseif regionalThreat>=40 then return "ReinforcedPatrols"
+ elseif regionalThreat>=20 then return "Uneasy"
+ return "Calm"
+end
+Players.PlayerRemoving:Connect(function(player) memory[player.UserId]=nil end)
+return NemesisService
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemesisService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000009"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- ModuleScript: ServerScriptService/Services/MovementService
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local Config=require(ReplicatedStorage:WaitForChild("Nemezida"):WaitForChild("Shared"):WaitForChild("NemezidaConfig"))
+local Service={}
+local lastRequest: {[Player]: number}={}
+local WALK_SPEED=Config.Player.WalkSpeed
+local RUN_SPEED=Config.Player.RunSpeed
+
+local function setup(player: Player,character: Model)
+ local humanoid=character:WaitForChild("Humanoid",10)
+ if not humanoid or not humanoid:IsA("Humanoid") then return end
+ humanoid.WalkSpeed=WALK_SPEED
+ player:SetAttribute("IsSprinting",false)
+ if player:GetAttribute("MaxStamina")==nil then player:SetAttribute("MaxStamina",Config.Player.MaxStamina) end
+ if player:GetAttribute("Stamina")==nil then player:SetAttribute("Stamina",Config.Player.MaxStamina) end
+end
+
+function Service.Init()
+ local folder=ReplicatedStorage:FindFirstChild("NemezidaRemotes") or Instance.new("Folder")
+ folder.Name="NemezidaRemotes"; folder.Parent=ReplicatedStorage
+ local remote=folder:FindFirstChild("SetSprinting") or Instance.new("RemoteEvent")
+ remote.Name="SetSprinting"; remote.Parent=folder
+
+ Players.PlayerAdded:Connect(function(player)
+  player.CharacterAdded:Connect(function(character) setup(player,character) end)
+  if player.Character then task.spawn(setup,player,player.Character) end
+ end)
+ for _,player in Players:GetPlayers() do
+  player.CharacterAdded:Connect(function(character) setup(player,character) end)
+  if player.Character then task.spawn(setup,player,player.Character) end
+ end
+
+ remote.OnServerEvent:Connect(function(player,value)
+  if typeof(value)~="boolean" then return end
+  local now=os.clock()
+  -- A rejected rapid press is acknowledged with the current server state.
+  if value and now-(lastRequest[player] or 0)<Config.Movement.SprintRequestInterval then
+   remote:FireClient(player,player:GetAttribute("IsSprinting")==true)
+   return
+  end
+  if value then lastRequest[player]=now end
+  local character=player.Character
+  local humanoid=character and character:FindFirstChildOfClass("Humanoid")
+  if not humanoid or humanoid.Health<=0 then
+   remote:FireClient(player,false)
+   return
+  end
+  local stamina=player:GetAttribute("Stamina") or 0
+  if value and stamina<=0 then
+   player:SetAttribute("IsSprinting",false)
+   humanoid.WalkSpeed=WALK_SPEED
+   remote:FireClient(player,false)
+   return
+  end
+  player:SetAttribute("IsSprinting",value)
+  humanoid.WalkSpeed=if value then RUN_SPEED else WALK_SPEED
+  remote:FireClient(player,value)
+ end)
+
+ task.spawn(function()
+  local previous=os.clock()
+  while true do
+   task.wait(0.1)
+   local now=os.clock()
+   local dt=math.min(now-previous,0.25)
+   previous=now
+   for _,player in Players:GetPlayers() do
+    local stamina=player:GetAttribute("Stamina") or 0
+    local maxStamina=player:GetAttribute("MaxStamina") or Config.Player.MaxStamina
+    local character=player.Character
+    local humanoid=character and character:FindFirstChildOfClass("Humanoid")
+    if humanoid and humanoid.Health>0 then
+     if player:GetAttribute("IsSprinting")==true then
+      stamina=math.max(0,stamina-Config.Movement.StaminaDrainPerSecond*dt)
+      if stamina<=0 then
+       player:SetAttribute("IsSprinting",false)
+       humanoid.WalkSpeed=WALK_SPEED
+       remote:FireClient(player,false)
+      end
+     else
+      stamina=math.min(maxStamina,stamina+Config.Movement.StaminaRegenPerSecond*dt)
+     end
+     player:SetAttribute("Stamina",stamina)
+    end
+   end
+  end
+ end)
+ Players.PlayerRemoving:Connect(function(player) lastRequest[player]=nil end)
+end
+return Service
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">MovementService</string></Properties></Item></Item><Item class="Script" referent="RBX00000000000000000000000000000011"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- Script: ServerScriptService/Bootstrap
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local ServerScriptService=game:GetService("ServerScriptService")
+local root=ReplicatedStorage:FindFirstChild("Nemezida") or Instance.new("Folder")
+root.Name="Nemezida"; root.Parent=ReplicatedStorage
+local services=ServerScriptService:WaitForChild("Services")
+require(services:WaitForChild("CombatService")).Init()
+require(services:WaitForChild("EnemyAIService")).Init()
+local HubGenerator=require(services:WaitForChild("HubGenerator"))
+require(services:WaitForChild("NemesisService"))
+require(services:WaitForChild("MovementService")).Init()
+if workspace:GetAttribute("NemezidaWorldSeed")==nil then workspace:SetAttribute("NemezidaWorldSeed",847291) end
+HubGenerator.Generate(workspace:GetAttribute("NemezidaWorldSeed"))
+print("[Немезида] Серверные службы v0.4-dev.3 запущены.")
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">Bootstrap</string></Properties></Item></Item>
+  <Item class="StarterPlayer" referent="RBX00000000000000000000000000000017"><Properties><string name="Name">StarterPlayer</string></Properties><Item class="StarterPlayerScripts" referent="RBX00000000000000000000000000000016"><Properties><string name="Name">StarterPlayerScripts</string></Properties><Item class="LocalScript" referent="RBX00000000000000000000000000000013"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- LocalScript: StarterPlayer/StarterPlayerScripts/NemezidaCamera
+local Players=game:GetService("Players")
+local RunService=game:GetService("RunService")
+local player=Players.LocalPlayer
+local activeCamera: Camera?=nil
+local HEIGHT=42
+local BACK=34
+local LOOK_OFFSET=Vector3.new(0,2,0)
+
+RunService:BindToRenderStep("NemezidaIsometricCamera",Enum.RenderPriority.Camera.Value,function()
+ local camera=workspace.CurrentCamera
+ if not camera then return end
+ if activeCamera~=camera then
+  activeCamera=camera
+  camera.CameraType=Enum.CameraType.Scriptable
+ end
+
+ local character=player.Character
+ local root=character and character:FindFirstChild("HumanoidRootPart")
+ if not root then return end
+ local focus=root.Position+LOOK_OFFSET
+ local position=focus+Vector3.new(0,HEIGHT,BACK)
+ camera.CFrame=CFrame.lookAt(position,focus)
+ camera.FieldOfView=42
+end)
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemezidaCamera</string></Properties></Item><Item class="LocalScript" referent="RBX00000000000000000000000000000014"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- LocalScript: StarterPlayer/StarterPlayerScripts/NemezidaCombat
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local UserInputService=game:GetService("UserInputService")
+local CollectionService=game:GetService("CollectionService")
+local player=Players.LocalPlayer
+local mouse=player:GetMouse()
+local remotes=ReplicatedStorage:WaitForChild("NemezidaRemotes")
+local attackRemote=remotes:WaitForChild("BasicAttack") :: RemoteEvent
+local abilityRemote=remotes:WaitForChild("UseAbility") :: RemoteEvent
+
+local function enemyFromTarget(target: Instance?): Model?
+ if not target then return nil end
+ local model=if target:IsA("Model") then target else target:FindFirstAncestorOfClass("Model")
+ if model and CollectionService:HasTag(model,"NemezidaEnemy") then return model end
+ return nil
+end
+
+local function attack()
+ local enemy=enemyFromTarget(mouse.Target)
+ if enemy then attackRemote:FireServer(enemy) end
+end
+local keyAbilities={
+ [Enum.KeyCode.Z]="SealStrike",
+ [Enum.KeyCode.X]="ShadowDash",
+ [Enum.KeyCode.C]="EarthRend",
+ [Enum.KeyCode.V]="AbyssRelease",
+ [Enum.KeyCode.B]="Barrier",
+}
+UserInputService.InputBegan:Connect(function(input,processed)
+ if processed then return end
+ if input.UserInputType==Enum.UserInputType.MouseButton1 or input.KeyCode==Enum.KeyCode.F then
+  attack()
+  return
+ end
+ local ability=keyAbilities[input.KeyCode]
+ if ability then
+  local enemy=enemyFromTarget(mouse.Target)
+  if ability=="Barrier" or ability=="ShadowDash" then
+   abilityRemote:FireServer(ability,enemy)
+  elseif enemy then
+   abilityRemote:FireServer(ability,enemy)
+  end
+ end
+end)
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemezidaCombat</string></Properties></Item><Item class="LocalScript" referent="RBX00000000000000000000000000000015"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+-- LocalScript: StarterPlayer/StarterPlayerScripts/NemezidaMovement
+local Players=game:GetService("Players")
+local UserInputService=game:GetService("UserInputService")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local player=Players.LocalPlayer
+local remote=ReplicatedStorage:WaitForChild("NemezidaRemotes"):WaitForChild("SetSprinting") :: RemoteEvent
+local requestedSprinting=false
+
+local function setSprint(value: boolean)
+ if requestedSprinting==value then return end
+ requestedSprinting=value
+ remote:FireServer(value)
+end
+
+remote.OnClientEvent:Connect(function(serverState)
+ if typeof(serverState)~="boolean" then return end
+ -- If the server rejects a start request (for example, empty stamina), wait
+ -- for the player to release and press Shift again instead of pretending to run.
+ if not serverState and requestedSprinting then
+  requestedSprinting=false
+ end
+end)
+
+UserInputService.InputBegan:Connect(function(input,processed)
+ if not processed and input.KeyCode==Enum.KeyCode.LeftShift then setSprint(true) end
+end)
+UserInputService.InputEnded:Connect(function(input)
+ if input.KeyCode==Enum.KeyCode.LeftShift then setSprint(false) end
+end)
+
+player.CharacterAdded:Connect(function()
+ requestedSprinting=false
+end)
+]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemezidaMovement</string></Properties></Item></Item></Item>
+  <Item class="Lighting" referent="RBX00000000000000000000000000000018"><Properties>
+<Color3 name="Ambient"><R>0.105882354</R><G>0.086274512</G><B>0.129411772</B></Color3>
+<Color3 name="OutdoorAmbient"><R>0.078431375</R><G>0.066666670</G><B>0.105882354</B></Color3>
+<Color3 name="FogColor"><R>0.129411772</R><G>0.105882354</G><B>0.160784319</B></Color3>
+<float name="Brightness">1.25</float><float name="FogStart">90</float><float name="FogEnd">520</float>
+<bool name="GlobalShadows">true</bool><string name="TimeOfDay">01:00:00</string>
+<string name="Name">Lighting</string></Properties></Item>
+</roblox>
