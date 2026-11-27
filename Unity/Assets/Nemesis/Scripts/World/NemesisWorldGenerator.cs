@@ -160,7 +160,7 @@ namespace Nemesis.World
                 chest.transform.localPosition = chestPosition;
                 chest.AddComponent<NemesisWorldInteractable>().Configure(
                     "Пепельный тайник",
-                    "E — открыть",
+                    "Открыть",
                     "Под слоем золы лежат кристаллы Эссенции.",
                     25,
                     true);
