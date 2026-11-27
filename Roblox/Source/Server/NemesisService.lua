@@ -52,7 +52,7 @@ function NemesisService.GetThreatState()
  elseif regionalThreat>=60 then return "EliteThreats"
  elseif regionalThreat>=40 then return "ReinforcedPatrols"
  elseif regionalThreat>=20 then return "Uneasy"
- return "Calm"
-end
+ else return "Calm"
+ end
 Players.PlayerRemoving:Connect(function(player) memory[player.UserId]=nil end)
 return NemesisService
