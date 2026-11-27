@@ -14,7 +14,7 @@ v0.4-dev.6 содержит автоматический сценарий зап
 **Граница проверки:** Roblox Studio, Luau compiler, Rojo build и Play session в этой среде не запускались.
 
 ## Файл Roblox Studio
-Текущий Place с импортированными Polygon-ассетами находится в библиотеке ChatGPT как NEMEZIDA_Forest_Grove_Placed_v2(1).rbxlx. Он ещё не опубликован в Roblox/Releases репозитория. Старые dev-файлы находятся в [Roblox/Releases](Roblox/Releases/).
+Аудированный Place-файл NEMEZIDA_Forest_Grove_Placed_v2(1).rbxlx пока не опубликован в Roblox/Releases репозитория. Старые dev-файлы находятся в [Roblox/Releases](Roblox/Releases/).
 
 ## Быстрый старт
 1. Открыть актуальный .rbxlx через File → Open from File в Roblox Studio.
