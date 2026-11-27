@@ -15,7 +15,14 @@ assert(spawn and spawn:IsA("SpawnLocation"), "NemezidaSpawn is missing")
 assert(spawn.Parent == Workspace, "NemezidaSpawn must be a direct child of Workspace")
 assert(spawn.Anchored and spawn.CanCollide, "SpawnLocation must be a solid anchored part")
 
-local ray = Workspace:Raycast(spawn.Position + Vector3.new(0, 12, 0), Vector3.new(0, -24, 0))
+local rayParams = RaycastParams.new()
+rayParams.FilterType = Enum.RaycastFilterType.Exclude
+local excluded = {}
+for _, player in Players:GetPlayers() do
+ if player.Character then table.insert(excluded, player.Character) end
+end
+rayParams.FilterDescendantsInstances = excluded
+local ray = Workspace:Raycast(spawn.Position + Vector3.new(0, 12, 0), Vector3.new(0, -24, 0), rayParams)
 assert(ray ~= nil, "No collidable surface exists beneath the spawn point")
 assert(ray.Instance == spawn or ray.Instance.Name == "SpawnPlaza" or ray.Instance.Name == "AshenGround",
  "The spawn point is not above its intended safe surface")
