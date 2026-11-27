@@ -20,9 +20,8 @@ v0.4-dev.5 содержит автоматический сценарий зап
 ## Быстрый старт
 1. Скачать .rbxlx из Roblox/Releases/.
 2. Открыть через File → Open from File в Roblox Studio.
-3. Просто нажать Play (F5). Никакие команды в Command Bar запускать не нужно.
+3. Просто нажать Play (F5). Никакие команды, вставки кода или действия в Command Bar для старта не нужны.
 4. Убедиться, что игрок стоит на площади, в Explorer есть Workspace/NemezidaGeneratedHub, а в мире появились нейтральные враги.
-5. При необходимости запустить Tests/STUDIO_WORLD_SPAWN_TEST.lua в серверном Command Bar во время Play.
 
 Управление: WASD, ЛКМ/F, Z/X/C/V/B, Shift.
 
