@@ -1,6 +1,6 @@
 --!strict
 local Config = {}
-Config.Version = "0.4.0-dev.4"
+Config.Version = "0.4.0-dev.6"
 Config.Player = {MaxHealth=100, Attack=12, Defense=5, MaxStamina=100, MaxEssence=100, WalkSpeed=16, RunSpeed=23}
 Config.Combat = {BasicAttackMultiplier=1, CriticalMultiplier=1.5, DefenseFactor=0.35, AttackRange=9, AttackCooldown=0.65, EnemyAlertDuration=12, EnemyReturnDistance=4}
 Config.Movement = {StaminaDrainPerSecond=24, StaminaRegenPerSecond=16, SprintRequestInterval=0.15}
