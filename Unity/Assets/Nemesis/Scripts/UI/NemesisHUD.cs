@@ -1,6 +1,7 @@
 using UnityEngine;
 using Nemesis.Combat;
 using Nemesis.Player;
+using Nemesis.AI;
 
 namespace Nemesis.UI
 {
@@ -27,13 +28,14 @@ namespace Nemesis.UI
 
             const float x = 22f, y = 20f, width = 250f, height = 16f;
             GUI.color = new Color(0.07f, 0.06f, 0.09f, 0.88f);
-            GUI.Box(new Rect(x - 10, y - 8, width + 20, 116), GUIContent.none);
+            GUI.Box(new Rect(x - 10, y - 8, width + 20, 140), GUIContent.none);
             GUI.color = Color.white;
             GUI.Label(new Rect(x, y - 3, width, 22), "N E M E Z I D A", title);
             DrawBar(x, y + 25, width, height, health.Current, health.Maximum, new Color(0.62f, 0.18f, 0.22f), "HP");
             DrawBar(x, y + 49, width, height, resources.Stamina, resources.MaxStamina, new Color(0.72f, 0.62f, 0.31f), "STAMINA");
             DrawBar(x, y + 73, width, height, resources.Essence, resources.MaxEssence, new Color(0.42f, 0.30f, 0.72f), "ESSENCE");
             GUI.Label(new Rect(x, y + 100, 500, 24), "LMB/F Attack   Space Dodge   Shift Sprint   Z/X/C/V/B Abilities", label);
+            GUI.Label(new Rect(x, y + 121, 520, 20), NemesisPlayerMemory.Description, label);
         }
 
         private void DrawBar(float x, float y, float width, float height, float value, float max, Color color, string caption)
