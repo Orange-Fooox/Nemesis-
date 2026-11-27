@@ -14,7 +14,7 @@
 
 **Важно:** Roblox Studio, Rojo build и Play session не запускались. Исходники не являются подтверждённой рабочей сборкой.
 
-Файлы сборок Roblox и архивы должны быть отдельно проверены и добавлены в Roblox/Releases/. Не считать их загруженными только по упоминанию в истории разработки.
+В Roblox/Releases/NEMEZIDA_Studio_v0_4_dev3.rbxlx добавлен XML Place-файл для Roblox Studio, собранный из актуальных исходников v0.4-dev.3. Это открываемый dev-срез, а не подтверждённый релиз: запуск в Roblox Studio ещё не проводился.
 
 ## Следующая веха: v0.4 «Живой мир Немезиды»
 - Процедурный хаб «Пепельный Рубеж».
@@ -26,8 +26,11 @@
 
 Подробности: [дорожная карта](docs/MILESTONES.md), [генерация](docs/PROCEDURAL_GENERATION.md), [система Немезиды](docs/NEMESIS_SYSTEM.md).
 
+## Файл для Roblox Studio
+Открой или скачай [NEMEZIDA_Studio_v0_4_dev3.rbxlx](Roblox/Releases/NEMEZIDA_Studio_v0_4_dev3.rbxlx), затем в Studio выбери File → Open from File. Файл содержит текущие серверные и клиентские скрипты v0.4-dev.3 и стартовую настройку мрачного освещения. Статическая структура проверена, но запуск в Studio не подтверждён.
+
 ## Исходники разработки
-Luau-модули v0.4-dev.3 находятся в [Roblox/Source](Roblox/Source/README.md). Это кодовая основа, не готовая сборка Studio.
+Luau-модули v0.4-dev.3 находятся в [Roblox/Source](Roblox/Source/README.md).
 
 ## Документы
 - [Game Bible](docs/GAME_BIBLE.md)
@@ -43,7 +46,7 @@ Luau-модули v0.4-dev.3 находятся в [Roblox/Source](Roblox/Source
 - [Приёмочные тесты](Tests/ACCEPTANCE_TESTS_v0_4.md)
 
 ## Структура
-- Roblox/Releases/ — проверенные файлы .rbxlx и архивы релизов.
+- Roblox/Releases/ — экспортированные файлы Roblox Studio и заметки к ним; статус проверки указан отдельно.
 - Roblox/Source/ — экспортированные исходники Luau.
 - Roblox/Assets/ — модели, изображения, звуки и другие ресурсы.
 - docs/ — документация.
