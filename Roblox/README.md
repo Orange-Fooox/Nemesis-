@@ -1,8 +1,8 @@
 # Roblox project
 
-Текущая сборка: v0.4-dev.5.
+Текущая сборка: v0.4-dev.6.
 
-- Готовый файл Studio: Releases/NEMEZIDA_Studio_v0_4_dev5.rbxlx.
+- Готовый файл Studio: Releases/NEMEZIDA_Studio_v0_4_dev6.rbxlx.
 - Luau-исходники: Source/.
 - Инструкция: BUILD_AND_TEST.md.
 - Приёмочные тесты: ../Tests/ACCEPTANCE_TESTS_v0_4.md.
