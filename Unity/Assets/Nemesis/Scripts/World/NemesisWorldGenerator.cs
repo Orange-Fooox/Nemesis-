@@ -310,8 +310,7 @@ namespace Nemesis.World
                     new Vector2(-10f, -32f), new Vector2(10f, -32f),
                     new Vector2(-10f, 32f), new Vector2(10f, 32f),
                     new Vector2(-32f, -10f), new Vector2(32f, -10f),
-                    new Vector2(-32f, 10f), new Vector2(32f, 10f),
-                    new Vector2(-32f, -1f), new Vector2(32f, 1f)
+                    new Vector2(-32f, 10f), new Vector2(32f, 10f)
                 };
 
                 for (int i = 0; i < treeAnchors.Length; i++)
