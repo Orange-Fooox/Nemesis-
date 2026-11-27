@@ -305,12 +305,21 @@ namespace Nemesis.World
 
             private void BuildOutskirts()
             {
-                for (int i = 0; i < 18; i++)
+                Vector2[] treeAnchors =
                 {
-                    float angle = i * Mathf.PI * 2f / 18f;
-                    float radius = Range(36.8f, 39.8f);
-                    Vector3 p = new Vector3(Mathf.Cos(angle) * radius, 0f, Mathf.Sin(angle) * radius);
-                    if (Mathf.Abs(p.x) < 6f && p.z > 30f) continue; // Keep the Soul Gate approach clear.
+                    new Vector2(-10f, -32f), new Vector2(10f, -32f),
+                    new Vector2(-10f, 32f), new Vector2(10f, 32f),
+                    new Vector2(-32f, -10f), new Vector2(32f, -10f),
+                    new Vector2(-32f, 10f), new Vector2(32f, 10f),
+                    new Vector2(-32f, -1f), new Vector2(32f, 1f)
+                };
+
+                for (int i = 0; i < treeAnchors.Length; i++)
+                {
+                    Vector3 p = new Vector3(
+                        treeAnchors[i].x + Range(-.7f, .7f),
+                        0f,
+                        treeAnchors[i].y + Range(-.7f, .7f));
                     SpawnProp("tree", "AshenTree_" + i, p,
                         new Vector3(2.6f, 4.3f, 2.6f), PrimitiveType.Sphere,
                         new Color(.16f, .22f, .16f));
