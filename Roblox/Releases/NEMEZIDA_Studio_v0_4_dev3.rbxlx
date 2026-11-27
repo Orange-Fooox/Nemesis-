@@ -23,7 +23,7 @@ Config.Enemies = {
  AshenWolf={DisplayName="Пепельный волк",MaxHealth=80,Attack=15,Defense=3,WalkSpeed=20,DetectionRange=25,AttackRange=5,AttackCooldown=2.2,XP=20},
 }
 return Config
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemezidaConfig</string></Properties></Item></Item></Item></Item>
+]]></ProtectedString><string name="Name">NemezidaConfig</string></Properties></Item></Item></Item></Item>
   <Item class="ServerScriptService" referent="RBX00000000000000000000000000000012"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Folder" referent="RBX00000000000000000000000000000010"><Properties><string name="Name">Services</string></Properties><Item class="ModuleScript" referent="RBX00000000000000000000000000000005"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/CombatService
 local Players = game:GetService("Players")
@@ -178,7 +178,7 @@ function CombatService.Init()
  Players.PlayerRemoving:Connect(function(player) lastAttack[player]=nil; lastAbility[player]=nil end)
 end
 return CombatService
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">CombatService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000006"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">CombatService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000006"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/EnemyAIService
 -- Tagged NPCs remain neutral until a player damages/provokes them.
 local Players=game:GetService("Players")
@@ -341,7 +341,7 @@ function Service.Init()
  end)
 end
 return Service
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">EnemyAIService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000007"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">EnemyAIService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000007"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/HubGenerator
 -- Generates a deterministic greybox hub. Art pass and bespoke building models come later.
 local Workspace=game:GetService("Workspace")
@@ -409,7 +409,7 @@ function HubGenerator.Generate(seed: number?)
  return root
 end
 return HubGenerator
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">HubGenerator</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000008"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">HubGenerator</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000008"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/NemesisService
 -- Server-owned, intentionally bounded adaptation data.
 local Players=game:GetService("Players")
@@ -467,7 +467,7 @@ function NemesisService.GetThreatState()
 end
 Players.PlayerRemoving:Connect(function(player) memory[player.UserId]=nil end)
 return NemesisService
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">NemesisService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000009"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">NemesisService</string></Properties></Item><Item class="ModuleScript" referent="RBX00000000000000000000000000000009"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- ModuleScript: ServerScriptService/Services/MovementService
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
@@ -559,7 +559,7 @@ function Service.Init()
  Players.PlayerRemoving:Connect(function(player) lastRequest[player]=nil end)
 end
 return Service
-]]></ProtectedString><bool name="Disabled">false</bool><string name="Name">MovementService</string></Properties></Item></Item><Item class="Script" referent="RBX00000000000000000000000000000011"><Properties><ProtectedString name="Source"><![CDATA[--!strict
+]]></ProtectedString><string name="Name">MovementService</string></Properties></Item></Item><Item class="Script" referent="RBX00000000000000000000000000000011"><Properties><ProtectedString name="Source"><![CDATA[--!strict
 -- Script: ServerScriptService/Bootstrap
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local ServerScriptService=game:GetService("ServerScriptService")
