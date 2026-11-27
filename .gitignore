@@ -1,4 +1,4 @@
-# Unity generated data
+﻿# Unity generated data
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -8,6 +8,9 @@
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
 [Rr]ecordings/
+
+# Licensed third-party source art that must be installed locally
+Unity/Assets/ThirdParty/CursedLand/
 
 # IDE and local workspace
 .vs/
@@ -27,3 +30,4 @@
 sysinfo.txt
 *.stackdump
 *.prof
+

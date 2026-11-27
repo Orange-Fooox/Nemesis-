@@ -7,57 +7,58 @@ on:
       - main
     paths:
       - "Unity/**"
+      - "docs/**"
+      - "README.md"
+      - "CHANGELOG.md"
+      - ".gitignore"
       - ".github/workflows/unity-windows-build.yml"
-      - ".github/scripts/fetch-kenney-mini-dungeon.sh"
 
 permissions:
   contents: read
 
 jobs:
   source-archive:
-    name: Package Unity project source and CC0 models
+    name: Validate and package Unity source
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Kenney Mini Dungeon 2.0
-        shell: bash
-        run: bash .github/scripts/fetch-kenney-mini-dungeon.sh
-
-      - name: Validate Unity project structure and create ZIP
+      - name: Validate Unity project structure and asset licenses
         shell: bash
         run: |
           set -euo pipefail
           test -f Unity/ProjectSettings/ProjectVersion.txt
           test -f Unity/Packages/manifest.json
-          test -f Unity/Assets/Editor/NemesisProjectBootstrap.cs
-          test -f Unity/Assets/NemesisContent/Imported/KenneyMiniDungeon/License.txt
-          test "$(find "Unity/Assets/NemesisContent/Imported/KenneyMiniDungeon/Models/GLB format" -maxdepth 1 -type f -name '*.glb' | wc -l)" -eq 30
+          test -f Unity/Assets/Nemesis/Editor/NemesisWorldBuilder.cs
+          test -f Unity/Assets/Nemesis/Editor/NemesisDungeonSceneBuilder.cs
+          test -f Unity/Assets/Nemesis/Scenes/AshenOutskirts.unity
+          test -f Unity/Assets/Nemesis/Scenes/AshenDungeon.unity
+          test -f Unity/Assets/ThirdParty/NemesisCatacombs/public-license.txt
+          test -f Unity/Assets/ThirdParty/NemesisFreeCC0/ASSET_CREDITS.md
+          test -f Unity/Assets/ThirdParty/2DPIXXWarrior/license_0.txt
+          test -f Unity/ASSET_SETUP.md
+          test -f Unity/Tools/Install-DarkReaperPreview.ps1
           mkdir -p dist
-          zip -qr dist/Nemesis-Unity-Project.zip Unity README.md CHANGELOG.md docs .gitignore -x "Unity/Library/*" "Unity/Temp/*" "Unity/Obj/*" "Unity/Build/*" "Unity/Logs/*" "Unity/UserSettings/*"
-          sha256sum dist/Nemesis-Unity-Project.zip > dist/SHA256SUMS.txt
+          zip -qr dist/Pechat-Bezdny-Unity-Source.zip Unity README.md CHANGELOG.md docs .gitignore
+          sha256sum dist/Pechat-Bezdny-Unity-Source.zip > dist/SHA256SUMS.txt
 
       - name: Upload Unity source project
         uses: actions/upload-artifact@v4
         with:
-          name: Nemesis-Unity-Project
+          name: Pechat-Bezdny-Unity-Source
           path: |
-            dist/Nemesis-Unity-Project.zip
+            dist/Pechat-Bezdny-Unity-Source.zip
             dist/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 14
 
   build-windows:
-    name: Build Nemesis for Windows x64
+    name: Build Печать Бездны for Windows x64
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download Kenney Mini Dungeon 2.0
-        shell: bash
-        run: bash .github/scripts/fetch-kenney-mini-dungeon.sh
 
       - name: Build with Unity
         uses: game-ci/unity-builder@v4
@@ -67,13 +68,13 @@ jobs:
           projectPath: Unity
           unityVersion: 6000.0.85f2
           targetPlatform: StandaloneWindows64
-          buildMethod: Nemesis.EditorTools.NemesisBuild.PerformBuild
+          buildMethod: NemesisBuild.BuildCompleteWindowsGame
           allowDirtyBuild: true
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
         with:
-          name: Nemesis-Windows-x64
-          path: Unity/Build/
+          name: Pechat-Bezdny-Windows-x64
+          path: Unity/Builds/Pechat-Bezdny-Windows/
           if-no-files-found: error
           retention-days: 14

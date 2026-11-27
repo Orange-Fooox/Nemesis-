@@ -1,0 +1,12 @@
+using UnityEngine;
+
+public class NemesisNPC : MonoBehaviour
+{
+    [TextArea]
+    public string dialogue = "\u0421\u0442\u0430\u0440\u044B\u0435 \u0434\u043E\u0440\u043E\u0433\u0438 \u043F\u0440\u043E\u0431\u0443\u0436\u0434\u0430\u044E\u0442\u0441\u044F. \u041D\u0435 \u0438\u0434\u0438 \u043D\u0430 \u0437\u0432\u043E\u043D \u043A\u043E\u043B\u043E\u043A\u043E\u043B\u043E\u0432 \u043F\u043E\u0441\u043B\u0435 \u0437\u0430\u043A\u0430\u0442\u0430.";
+
+    public void Talk()
+    {
+        NemesisHUD.Instance?.SetMessage(dialogue);
+    }
+}
