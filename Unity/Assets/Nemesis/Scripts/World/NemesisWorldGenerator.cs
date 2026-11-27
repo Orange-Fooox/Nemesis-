@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Nemesis.Content;
+using Nemesis.Interaction;
 using UnityEngine;
 
 namespace Nemesis.World
@@ -47,6 +48,7 @@ namespace Nemesis.World
             {
                 BuildGroundAndRoads();
                 BuildCentralPlaza();
+                BuildInteractables();
                 BuildDistrictBuildings();
                 BuildLandmarks();
                 BuildOutskirts();
@@ -145,6 +147,23 @@ namespace Nemesis.World
 
                 Torch("PlazaTorch_West", new Vector3(-9.7f, 0f, 0f));
                 Torch("PlazaTorch_East", new Vector3(9.7f, 0f, 0f));
+            }
+
+            private void BuildInteractables()
+            {
+                Vector3 chestPosition = new Vector3(-10f, 0f, 10f);
+                SpawnProp("chest", "AshenSupplyChest_Visual", chestPosition,
+                    new Vector3(1.25f, .9f, 1.1f), PrimitiveType.Cube, new Color(.39f, .25f, .13f));
+
+                GameObject chest = new GameObject("Interactable_AshenCache");
+                chest.transform.SetParent(root, false);
+                chest.transform.localPosition = chestPosition;
+                chest.AddComponent<NemesisWorldInteractable>().Configure(
+                    "Пепельный тайник",
+                    "E — открыть",
+                    "Под слоем золы лежат кристаллы Эссенции.",
+                    25,
+                    true);
             }
 
             private void BuildDistrictBuildings()
