@@ -5,12 +5,11 @@
 ## Открытие проекта
 
 1. Установи Unity Hub и Unity 6000.0.85f2 с Windows Build Support.
-2. В Unity Hub выбери **Add → Add project from disk** и укажи эту папку `Unity`.
-3. Дождись импорта и компиляции.
-4. Выполни **Tools → Nemesis → Generate Asset Library** для резервных greybox-префабов.
-5. Выполни **Tools → Nemesis → Scan Imported Asset Packs**. Инструмент просканирует доступные Prefab/Model в Assets, создаст каталог и отчёт.
-6. Если сцена отсутствует, выполни **Tools → Nemesis → Create Prototype Scene**.
-7. Открой `Assets/Scenes/NemesisPrototype.unity` и нажми Play.
+2. В Unity Hub выбери **Add → Add project from disk** и укажи распакованную папку `Unity`.
+3. Дождись импорта пакетов и компиляции скриптов.
+4. При первом открытии Editor автоматически создаст `Assets/Scenes/NemesisPrototype.unity` и добавит её в Build Settings.
+5. Дождись сообщения `[Nemesis] First-run scene created`, затем открой созданную сцену и нажми Play.
+6. Если у тебя есть внешние модели в `Assets`, выполни **Tools → Nemesis → Scan Imported Asset Packs**.
 
 ## Текущий прототип
 
@@ -52,6 +51,6 @@
 
 ## Проверка
 
-Unity Editor в среде подготовки исходников не запускался. Компиляция, Play Mode и Windows build требуют фактического прогона в Unity 6000.0.85f2. Не считать прототип runtime-проверенным до прохождения этих шагов.
+ZIP содержит исходники проекта, настройки и документацию, но не кэш Library и не сторонние модели, которые отсутствовали в переданном архиве. Unity Editor в среде подготовки исходников не запускался. Компиляция, Play Mode и Windows build требуют фактического прогона в Unity 6000.0.85f2. Не считать прототип runtime-проверенным до прохождения этих шагов.
 
 Ранний этап разработки проходил на Roblox; краткая историческая справка сохранена в корневом README и документации миграции. Текущая разработка ведётся только на Unity.
