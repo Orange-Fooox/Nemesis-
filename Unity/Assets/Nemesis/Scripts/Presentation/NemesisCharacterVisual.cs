@@ -112,7 +112,10 @@ namespace Nemesis.Presentation
         private bool AttachImported(GameObject prefab, string objectName, Vector3 localAnchor,
             Vector3 localEuler, float targetSize)
         {
-            if (prefab == null || prefab.GetComponentInChildren<Renderer>(true) == null) return false;
+            if (prefab == null ||
+                prefab.GetComponentInChildren<Renderer>(true) == null ||
+                prefab.GetComponentInChildren<MonoBehaviour>(true) != null)
+                return false;
 
             GameObject instance = Instantiate(prefab, transform, false);
             instance.name = objectName;
@@ -121,9 +124,6 @@ namespace Nemesis.Presentation
 
             Collider[] colliders = instance.GetComponentsInChildren<Collider>(true);
             foreach (Collider item in colliders) item.enabled = false;
-
-            MonoBehaviour[] embeddedScripts = instance.GetComponentsInChildren<MonoBehaviour>(true);
-            foreach (MonoBehaviour script in embeddedScripts) script.enabled = false;
 
             Renderer[] renderers = instance.GetComponentsInChildren<Renderer>(true);
             if (renderers.Length > 0)
