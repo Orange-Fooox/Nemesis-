@@ -7,9 +7,9 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 local GOLD = Color3.fromRGB(206, 165, 91)
-local MUTED = Color3.fromRGB(155, 145, 132)
-local PANEL = Color3.fromRGB(19, 17, 22)
-local TRACK = Color3.fromRGB(48, 43, 52)
+local MUTED = Color3.fromRGB(193, 176, 148)
+local PANEL = Color3.fromRGB(36, 30, 27)
+local TRACK = Color3.fromRGB(79, 67, 57)
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "NemezidaHUD"
@@ -23,7 +23,7 @@ panel.Name = "StatusPanel"
 panel.Position = UDim2.fromOffset(22, 22)
 panel.Size = UDim2.fromOffset(292, 190)
 panel.BackgroundColor3 = PANEL
-panel.BackgroundTransparency = 0.12
+panel.BackgroundTransparency = 0.06
 panel.BorderSizePixel = 0
 panel.Parent = gui
 
