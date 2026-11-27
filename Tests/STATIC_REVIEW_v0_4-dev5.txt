@@ -1,0 +1,34 @@
+NEMEZIDA STATIC REVIEW v0.4-dev.5
+Date: 2026-11-27
+Repository: valik123f-collab/Nemesis-
+
+PURPOSE
+One-button Studio startup: open the Place and press Play. No Command Bar or
+manual generator invocation is required for normal startup.
+
+CHANGES
+1. ServerScriptService/Bootstrap is enabled in the Place and calls HubGenerator.Generate.
+2. CharacterAutoLoads is disabled while the server initializes the world.
+3. HubGenerator creates the collidable ground, spawn plaza, spawn location,
+   hub geometry and enemy spawn markers.
+4. PopulationService creates the procedural enemy population after generation.
+5. Bootstrap sets RespawnLocation, marks NemezidaWorldReady, enables character
+   autoload, and explicitly loads players already waiting for the world.
+6. onPlayerAdded now also handles an existing player.Character, covering the
+   race where a character exists before world generation finishes.
+7. CharacterAdded positions the character at HubGenerator.GetSpawnCFrame()
+   and clears linear/angular velocity.
+8. A fallback collidable floor and SpawnLocation are created if generation fails.
+9. Client camera, combat, movement and HUD LocalScripts are included in the Place.
+10. HubGenerator stamps generated world version 0.4.0-dev.5.
+
+STATIC CHECKS
+- XML Place structure and embedded source parity must be checked separately.
+- Place contains 7 ModuleScripts, 1 server Script and 4 LocalScripts.
+- Normal Play startup path does not depend on Tests/STUDIO_WORLD_SPAWN_TEST.lua.
+- The test script is optional diagnostics only.
+
+LIMITATIONS
+Roblox Studio, Luau compiler, Rojo CLI and Play/multiplayer sessions were NOT
+launched in this environment. This report does not certify runtime behavior,
+physics, NPC pathfinding, respawn timing or successful execution in Studio.
