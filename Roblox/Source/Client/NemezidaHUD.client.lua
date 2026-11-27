@@ -60,7 +60,7 @@ subtitle.TextSize = 9
 subtitle.TextXAlignment = Enum.TextXAlignment.Left
 subtitle.Parent = panel
 
-local barRows: {[string]: {Fill: Frame, Value: TextLabel}} = {}
+local barRows: {[string]: {Fill: Frame, Value: TextLabel, Label: TextLabel, Track: Frame}} = {}
 local barSpecs = {
  {Key="Health", Label="ЗДОРОВЬЕ", Color=Color3.fromRGB(164, 61, 66)},
  {Key="Essence", Label="ЭСЕНЦИЯ", Color=Color3.fromRGB(137, 78, 184)},
@@ -113,7 +113,7 @@ for index, spec in barSpecs do
  local fillCorner = Instance.new("UICorner")
  fillCorner.CornerRadius = UDim.new(1, 0)
  fillCorner.Parent = fill
- barRows[spec.Key] = {Fill=fill, Value=value}
+ barRows[spec.Key] = {Fill=fill, Value=value, Label=label, Track=track}
 end
 
 local footer = Instance.new("TextLabel")
@@ -148,7 +148,9 @@ local function updateBar(key: string, current: number, maximum: number, visible:
  row.Fill.Size = UDim2.fromScale(ratio, 1)
  row.Value.Text = string.format("%d / %d", math.floor(math.max(0,current)+0.5), math.floor(math.max(0,maximum)+0.5))
  if visible ~= nil then
-  row.Fill.Parent.Parent.Visible = visible
+  row.Label.Visible = visible
+  row.Value.Visible = visible
+  row.Track.Visible = visible
  end
 end
 
