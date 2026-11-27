@@ -29,8 +29,10 @@ namespace Nemesis.Enemies
         {
             if (visual != null) visual.PlayAction("BossSlam", .45f);
             if (adapted) return;
+            NemesisPlayerStyle style = NemesisPlayerMemory.DominantStyle;
+            if (style == NemesisPlayerStyle.Balanced) return;
             adapted = true;
-            switch (NemesisPlayerMemory.DominantStyle)
+            switch (style)
             {
                 case NemesisPlayerStyle.Melee:
                     if (ownHealth != null) ownHealth.SetDamageResistance(.12f);
