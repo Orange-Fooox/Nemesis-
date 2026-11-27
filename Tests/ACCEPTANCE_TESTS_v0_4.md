@@ -1,12 +1,12 @@
-# Приёмочные тесты v0.4-dev.4
+# Приёмочные тесты v0.4-dev.6
 
 Статус: новые сценарии подготовлены; фактический прогон в Roblox Studio не выполнялся.
 
 ## Подготовка проекта
-- [ ] Открыть Roblox/Releases/NEMEZIDA_Studio_v0_4_dev4.rbxlx через File → Open from File.
+- [ ] Открыть Roblox/Releases/NEMEZIDA_Studio_v0_4_dev6.rbxlx через File → Open from File.
 - [ ] Проверить иерархию ReplicatedStorage, ServerScriptService и StarterPlayerScripts.
 - [ ] Убедиться, что Output не содержит ошибок require или синтаксиса.
-- [ ] Убедиться, что Bootstrap сообщает v0.4-dev.4 и NemezidaWorldReady=true.
+- [ ] Убедиться, что Bootstrap сообщает v0.4-dev.6 и NemezidaWorldReady=true.
 
 ## Генерация и безопасное появление
 - [ ] Запустить сервер с WorldSeed=847291.
