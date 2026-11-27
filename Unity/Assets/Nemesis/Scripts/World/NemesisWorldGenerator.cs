@@ -75,13 +75,13 @@ namespace Nemesis.World
                 Box("EastWest_MainRoad", new Vector3(0f, .03f, 0f),
                     new Vector3(WorldHalfSize * 2f - 2f, .13f, 5.2f), RoadColor);
 
-                for (int i = -3; i <= 3; i++)
+                for (int i = -1; i <= 1; i += 2)
                 {
-                    float offset = i * 9f;
-                    Box("MarketSideRoad_" + (i + 3), new Vector3(offset, .04f, -24f),
-                        new Vector3(2.3f, .12f, 24f), RoadColor);
-                    Box("SanctuarySideRoad_" + (i + 3), new Vector3(offset, .04f, 24f),
-                        new Vector3(2.3f, .12f, 24f), RoadColor);
+                    float offset = i * 15f;
+                    Box("DistrictNorthSouthRoad_" + i, new Vector3(offset, .045f, 0f),
+                        new Vector3(2.3f, .12f, WorldHalfSize * 2f - 6f), RoadColor);
+                    Box("DistrictEastWestRoad_" + i, new Vector3(0f, .045f, offset),
+                        new Vector3(WorldHalfSize * 2f - 6f, .12f, 2.3f), RoadColor);
                 }
 
                 Box("CentralSquare_Stone", new Vector3(0f, .11f, 0f),
@@ -331,6 +331,14 @@ namespace Nemesis.World
                     instance.transform.position = root.TransformPoint(ground);
                     FitToBounds(instance, fallbackScale, ground);
                     DisableColliders(instance);
+                }
+                else if (string.Equals(category, "tree", StringComparison.OrdinalIgnoreCase))
+                {
+                    CreatePrimitive(name + "_Trunk", PrimitiveType.Cylinder,
+                        ground + Vector3.up * 1.25f, new Vector3(.55f, 2.5f, .55f),
+                        new Color(.22f, .15f, .11f));
+                    instance = CreatePrimitive(name + "_Canopy", PrimitiveType.Sphere,
+                        ground + Vector3.up * 3.1f, new Vector3(2.6f, 2.1f, 2.6f), fallbackColor);
                 }
                 else
                 {
