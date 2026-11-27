@@ -13,8 +13,10 @@ namespace Nemesis.Enemies {
   {
    provokedUntil=Time.time+alertDuration;
    if(adapted)return;
+   NemesisPlayerStyle style = NemesisPlayerMemory.DominantStyle;
+   if(style==NemesisPlayerStyle.Balanced)return;
    adapted=true;
-   switch(NemesisPlayerMemory.DominantStyle)
+   switch(style)
    {
     case NemesisPlayerStyle.Melee: if(ownHealth!=null)ownHealth.SetDamageResistance(.10f);attackRange+=.2f;break;
     case NemesisPlayerStyle.Abilities: moveSpeed*=1.12f;attackCooldown*=.94f;break;
