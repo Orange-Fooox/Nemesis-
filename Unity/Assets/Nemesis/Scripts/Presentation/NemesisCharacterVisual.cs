@@ -1,4 +1,5 @@
 using UnityEngine;
+using Nemesis.Content;
 
 namespace Nemesis.Presentation
 {
@@ -63,6 +64,70 @@ namespace Nemesis.Presentation
                 Part("Pack",PrimitiveType.Cube,new Vector3(0,1.18f,.28f),new Vector3(.48f,.62f,.30f),accent);
                 weapon.gameObject.SetActive(false);
             }
+
+            AttachImportedEquipment(style);
+        }
+
+        private void AttachImportedEquipment(NemesisCharacterStyle style)
+        {
+            NemesisAssetCatalog catalog = Resources.Load<NemesisAssetCatalog>("NemesisAssetCatalog");
+            if (catalog == null || style == NemesisCharacterStyle.Merchant) return;
+
+            if (style == NemesisCharacterStyle.Raider)
+            {
+                AttachImported(catalog.FindPrefab("dagger"), "Imported_Dagger",
+                    new Vector3(.48f, 1.0f, -.08f), new Vector3(0f, 0f, -18f), .85f);
+                return;
+            }
+
+            bool hasHelmet = AttachImported(catalog.FindPrefab("helmet"), "Imported_Helmet",
+                new Vector3(0f, 2.05f, 0f), Vector3.zero, .52f);
+            bool hasArmor = AttachImported(catalog.FindPrefab("chest_armor"), "Imported_ChestArmor",
+                new Vector3(0f, 1.18f, -.015f), Vector3.zero, .82f);
+
+            GameObject weaponPrefab = catalog.FindPrefab(style == NemesisCharacterStyle.Boss ? "greatsword" : "sword");
+            if (weaponPrefab == null) weaponPrefab = catalog.FindPrefab("greatsword");
+            bool hasWeapon = AttachImported(weaponPrefab, "Imported_Weapon",
+                new Vector3(.68f, 1.02f, -.06f), new Vector3(0f, 0f, -28f),
+                style == NemesisCharacterStyle.Boss ? 1.55f : 1.18f);
+
+            bool hasShield = style == NemesisCharacterStyle.Player &&
+                AttachImported(catalog.FindPrefab("shield"), "Imported_Shield",
+                    new Vector3(-.62f, 1.05f, -.02f), new Vector3(0f, 0f, 90f), .78f);
+
+            if (hasWeapon && weapon != null) weapon.gameObject.SetActive(false);
+        }
+
+        private bool AttachImported(GameObject prefab, string objectName, Vector3 localAnchor,
+            Vector3 localEuler, float targetSize)
+        {
+            if (prefab == null) return false;
+
+            GameObject instance = Instantiate(prefab, transform, false);
+            instance.name = objectName;
+            instance.transform.localPosition = localAnchor;
+            instance.transform.localRotation = Quaternion.Euler(localEuler);
+
+            Collider[] colliders = instance.GetComponentsInChildren<Collider>(true);
+            foreach (Collider item in colliders) item.enabled = false;
+
+            Renderer[] renderers = instance.GetComponentsInChildren<Renderer>(true);
+            if (renderers.Length > 0)
+            {
+                Bounds bounds = renderers[0].bounds;
+                for (int i = 1; i < renderers.Length; i++) bounds.Encapsulate(renderers[i].bounds);
+
+                float largestDimension = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+                float scaleFactor = targetSize / Mathf.Max(.001f, largestDimension);
+                instance.transform.localScale *= scaleFactor;
+
+                bounds = renderers[0].bounds;
+                for (int i = 1; i < renderers.Length; i++) bounds.Encapsulate(renderers[i].bounds);
+                Vector3 target = transform.TransformPoint(localAnchor);
+                instance.transform.position += target - bounds.center;
+            }
+
+            return true;
         }
 
         private Transform Part(string partName, PrimitiveType type, Vector3 position, Vector3 scale, Material material)
