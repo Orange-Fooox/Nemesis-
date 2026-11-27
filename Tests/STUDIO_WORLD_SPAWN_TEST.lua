@@ -1,5 +1,6 @@
 --!strict
--- Run from the SERVER Command Bar while a v0.4-dev.4 Play session is active.
+-- OPTIONAL DIAGNOSTIC ONLY. This script does NOT start the game.
+-- Normal startup: open the Place in Studio and press Play (F5).
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local CollectionService = game:GetService("CollectionService")
