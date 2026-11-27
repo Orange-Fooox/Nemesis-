@@ -37,9 +37,13 @@ namespace Nemesis.EditorTools
             new Rule("shield", "shield", "buckler", "tower shield"),
             new Rule("dagger", "dagger", "short blade", "knife"),
             new Rule("bow", "longbow", "shortbow", "crossbow", "bow"),
-            new Rule("pillar", "pillar", "column"),
-            new Rule("wall", "wall", "archway"),
+            new Rule("pillar", "pillar", "column", "support"),
+            new Rule("wall", "wall", "archway", "dungeon wall"),
             new Rule("floor", "floor tile", "floor", "ground tile"),
+            new Rule("door", "door", "gate", "entrance"),
+            new Rule("stairs", "stairs", "stair", "steps"),
+            new Rule("barrel", "barrel", "cask"),
+            new Rule("crate", "crate", "box", "supply crate"),
             new Rule("tree", "tree", "oak", "pine"),
             new Rule("torch", "torch", "lantern", "brazier"),
             new Rule("chest", "treasure chest", "chest", "supply crate"),
@@ -77,7 +81,12 @@ namespace Nemesis.EditorTools
                 if (string.IsNullOrEmpty(path)) continue;
                 path = path.Replace(Path.DirectorySeparatorChar, '/');
 
-                if (path.StartsWith("Assets/NemesisContent/", StringComparison.OrdinalIgnoreCase) ||
+                bool isImportedNemesisAsset = path.StartsWith(
+                    "Assets/NemesisContent/Imported/",
+                    StringComparison.OrdinalIgnoreCase);
+
+                if ((path.StartsWith("Assets/NemesisContent/", StringComparison.OrdinalIgnoreCase) &&
+                     !isImportedNemesisAsset) ||
                     path.StartsWith("Assets/Nemesis/", StringComparison.OrdinalIgnoreCase))
                     continue;
 
@@ -144,7 +153,7 @@ namespace Nemesis.EditorTools
             {
                 Debug.LogWarning("[Nemesis] No matching imported prefabs were found. The prototype will keep its generated fallback visuals.");
                 EditorUtility.DisplayDialog("Nemesis Asset Scan",
-                    "No matching imported prefabs were found. The catalog was created, but fallback visuals remain active.\n\nExpected pack folder: " + PreferredPackRoot,
+                    "No matching imported prefabs were found. The catalog was created, but fallback visuals remain active.\n\nImported packs should be placed under Assets/NemesisContent/Imported/.",
                     "OK");
             }
             else
@@ -198,7 +207,7 @@ namespace Nemesis.EditorTools
                 sb.AppendLine("No matching imported prefabs were found. This is expected when the source asset folders were not included in the project archive.");
 
             sb.AppendLine();
-            sb.AppendLine("The scan indexes prefabs already present under Assets. It does not download third-party packages or bypass publisher licensing.");
+            sb.AppendLine("The scan indexes prefabs and models already imported under Assets, including Assets/NemesisContent/Imported/. It does not download third-party packages or bypass publisher licensing.");
             return sb.ToString();
         }
 
