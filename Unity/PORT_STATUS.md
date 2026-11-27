@@ -15,7 +15,11 @@ Target: Unity 6 (6000.0.85f2)
 - [x] Editor menu for asset library and prototype scene generation.
 - [x] Editor catalog scanner for imported Prefab/Model assets.
 - [x] Local player combat telemetry and first bounded enemy adaptation response.
+- [x] Seeded Ashen Reach hub source: crossroads, central plaza, four districts, 12 buildings, landmarks and outer spawn points.
+- [x] First interaction loop: Mira dialogue and one-use Essence cache.
+- [x] Collision-aware CharacterController movement for raiders and the boss.
 - [ ] Open in Unity Editor, compile and playtest.
+- [ ] Verify hub navigation, NPC interaction range and chest reward in Play Mode.
 - [ ] Confirm that the locally installed armory package is discovered and correctly fitted to character anchors.
 - [ ] Confirm Windows x64 build.
 
@@ -27,7 +31,7 @@ Target: Unity 6 (6000.0.85f2)
 - [ ] Build a small hub encounter loop with one NPC, one dungeon room and one boss.
 
 ## Milestone 2 — world and progression
-- [ ] Seeded hub generation and stable spawn-safe layout.
+- [ ] Runtime-verify seeded hub generation and stable spawn-safe layout.
 - [ ] Modular dungeon room graph, connectors and validation.
 - [ ] Enemy archetypes and encounter director.
 - [ ] Inventory, equipment, loot, vendors and progression.
