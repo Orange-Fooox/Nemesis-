@@ -1,4 +1,5 @@
 using UnityEngine;
+using Nemesis.Controls;
 
 namespace Nemesis.Combat
 {
@@ -13,7 +14,7 @@ namespace Nemesis.Combat
 
         private void Update()
         {
-            if ((Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.F)) &&
+            if (NemesisInput.WasPressed(NemesisInputAction.Attack) &&
                 Time.time >= nextAttackTime)
                 Attack();
         }
