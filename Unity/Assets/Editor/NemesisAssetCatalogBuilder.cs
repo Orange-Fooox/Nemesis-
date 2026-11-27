@@ -47,6 +47,16 @@ namespace Nemesis.EditorTools
             new Rule("tree", "tree", "oak", "pine"),
             new Rule("torch", "torch", "lantern", "brazier"),
             new Rule("chest", "treasure chest", "chest", "supply crate"),
+            new Rule("coin", "coin"),
+            new Rule("potion", "potion", "elixir"),
+            new Rule("key", "key"),
+            new Rule("table", "table"),
+            new Rule("chair", "chair"),
+            new Rule("banner", "banner"),
+            new Rule("trap", "trap"),
+            new Rule("spear", "spear"),
+            new Rule("human_character", "character-human"),
+            new Rule("orc_character", "character-orc"),
             new Rule("altar", "altar", "shrine", "obelisk")
         };
 
@@ -70,6 +80,22 @@ namespace Nemesis.EditorTools
             var guidSet = new HashSet<string>(AssetDatabase.FindAssets("t:Prefab", folders));
             foreach (string modelGuid in AssetDatabase.FindAssets("t:Model", folders))
                 guidSet.Add(modelGuid);
+
+            // glTFast imports .glb through ScriptedImporter; include these explicitly instead
+            // of relying on the type filter to classify imported scripted assets.
+            const string importedRoot = "Assets/NemesisContent/Imported";
+            if (AssetDatabase.IsValidFolder(importedRoot))
+            {
+                foreach (string importedGuid in AssetDatabase.FindAssets(string.Empty, new[] { importedRoot }))
+                {
+                    string importedPath = AssetDatabase.GUIDToAssetPath(importedGuid);
+                    string extension = Path.GetExtension(importedPath);
+                    if (extension.Equals(".glb", StringComparison.OrdinalIgnoreCase) ||
+                        extension.Equals(".gltf", StringComparison.OrdinalIgnoreCase))
+                        guidSet.Add(importedGuid);
+                }
+            }
+
             string[] guids = guidSet.ToArray();
 
             var bestByCategory = new Dictionary<string, NemesisAssetEntry>(StringComparer.OrdinalIgnoreCase);
