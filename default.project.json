@@ -35,6 +35,9 @@
         },
         "MovementService": {
           "$path": "Roblox/Source/Server/MovementService.lua"
+        },
+        "PopulationService": {
+          "$path": "Roblox/Source/Server/PopulationService.lua"
         }
       }
     },
@@ -50,6 +53,9 @@
         },
         "NemezidaMovement": {
           "$path": "Roblox/Source/Client/NemezidaMovement.client.lua"
+        },
+        "NemezidaHUD": {
+          "$path": "Roblox/Source/Client/NemezidaHUD.client.lua"
         }
       }
     }
