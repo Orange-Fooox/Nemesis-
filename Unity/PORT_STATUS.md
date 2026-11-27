@@ -5,6 +5,7 @@ Target: Unity 6 (6000.0.85f2)
 
 ## Milestone 0 — Unity foundation
 - [x] Unity project structure and C# runtime scripts added.
+- [x] Unity Input System dependency and unified keyboard/mouse/gamepad adapter.
 - [x] Isometric camera and camera-relative movement.
 - [x] Sprint, stamina, dodge, HP and Essence.
 - [x] Basic melee and five abilities.
