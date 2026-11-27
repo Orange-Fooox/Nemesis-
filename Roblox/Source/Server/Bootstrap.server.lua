@@ -58,6 +58,13 @@ local function onPlayerAdded(player: Player)
  player.CharacterAdded:Connect(function(character)
   task.spawn(placeCharacterSafely, character)
  end)
+ -- Studio can connect a player before this Script finishes starting. If a
+ -- character already exists, move it after world generation instead of
+ -- leaving it at the default location or below the generated map.
+ local existingCharacter = player.Character
+ if existingCharacter then
+  task.spawn(placeCharacterSafely, existingCharacter)
+ end
 end
 
 Players.PlayerAdded:Connect(onPlayerAdded)
@@ -133,4 +140,4 @@ for _, player in Players:GetPlayers() do
  end
 end
 
-print("[Немезида] Серверные службы v0.4-dev.4 запущены. Hub generated:", generated)
+print("[Немезида] Автозапуск v0.4-dev.5 завершён. Мир готов:", worldReady, "Хаб создан:", generated, "Точка спавна:", spawnLocation:GetFullName())
