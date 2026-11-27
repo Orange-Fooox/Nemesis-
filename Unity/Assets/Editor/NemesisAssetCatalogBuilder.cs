@@ -33,12 +33,12 @@ namespace Nemesis.EditorTools
             new Rule("helmet", "helmet", "helm", "headgear", "great helm"),
             new Rule("chest_armor", "chestplate", "chest armor", "chest armour", "cuirass", "breastplate", "armor torso"),
             new Rule("greatsword", "greatsword", "claymore", "zweihander", "two handed sword", "two-handed sword"),
-            new Rule("sword", "longsword", "broadsword", "sword", "blade"),
+            new Rule("sword", "longsword", "broadsword", "sword"),
             new Rule("shield", "shield", "buckler", "tower shield"),
             new Rule("dagger", "dagger", "short blade", "knife"),
             new Rule("bow", "longbow", "shortbow", "crossbow", "bow"),
             new Rule("pillar", "pillar", "column"),
-            new Rule("wall", "wall", "archway", "arch"),
+            new Rule("wall", "wall", "archway"),
             new Rule("floor", "floor tile", "floor", "ground tile"),
             new Rule("tree", "tree", "oak", "pine"),
             new Rule("torch", "torch", "lantern", "brazier"),
@@ -89,7 +89,21 @@ namespace Nemesis.EditorTools
 
                 foreach (Rule rule in Rules)
                 {
-                    int score = Score(searchable, fileName.ToLowerInvariant(), rule.Keywords);
+                    string normalizedName = fileName.ToLowerInvariant();
+                    int score = Score(searchable, normalizedName, rule.Keywords);
+
+                    if (rule.Category == "chest" &&
+                        (normalizedName.Contains("chestplate") ||
+                         normalizedName.Contains("chest armor") ||
+                         normalizedName.Contains("chest armour")))
+                        score = 0;
+
+                    if (rule.Category == "sword" &&
+                        (normalizedName.Contains("greatsword") ||
+                         normalizedName.Contains("claymore") ||
+                         normalizedName.Contains("zweihander")))
+                        score = 0;
+
                     if (score > 0 && path.StartsWith(PreferredPackRoot, StringComparison.OrdinalIgnoreCase))
                         score += 30;
                     if (score <= 0) continue;
