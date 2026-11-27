@@ -1,0 +1,29 @@
+# Unity generated data
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# IDE and local workspace
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.suo
+*.tmp
+*.pidb
+*.booproj
+*.svclog
+
+# Crash and profiling outputs
+sysinfo.txt
+*.stackdump
+*.prof
