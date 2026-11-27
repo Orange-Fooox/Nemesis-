@@ -63,7 +63,11 @@ namespace Nemesis.EditorTools
                 ? new[] { PreferredPackRoot, "Assets" }
                 : new[] { "Assets" };
 
-            string[] guids = AssetDatabase.FindAssets("t:Prefab", folders);
+            var guidSet = new HashSet<string>(AssetDatabase.FindAssets("t:Prefab", folders));
+            foreach (string modelGuid in AssetDatabase.FindAssets("t:Model", folders))
+                guidSet.Add(modelGuid);
+            string[] guids = guidSet.ToArray();
+
             var bestByCategory = new Dictionary<string, NemesisAssetEntry>(StringComparer.OrdinalIgnoreCase);
             var allMatches = new List<NemesisAssetEntry>();
 
