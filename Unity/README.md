@@ -48,6 +48,7 @@
 - V — Abyss Release
 - B — Barrier
 - E — взаимодействие с NPC и сундуками
+- Геймпад: левый стик — движение, L3 — бег, RT — атака, A — уклонение, X/Y — первые способности, LB/RB — Earth Rend/Abyss Release, B — Barrier, D-pad вниз — взаимодействие
 
 ## Проверка
 
