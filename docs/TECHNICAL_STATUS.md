@@ -6,6 +6,13 @@
 ## v0.4-dev.1 — v0.4-dev.3
 Начальная Luau-основа: общая конфигурация, серверный бой, нейтральный AI, greybox-генератор хаба, NemesisService, управление, камера и клиентские способности. В dev.2 добавлены Raycast-проверки, ShadowDash, EarthRend, Barrier, VulnerabilityBonus и серверный Stamina. В dev.3 исправлены перепривязка камеры, подтверждения состояния спринта и ручной helper NPC.
 
+## v0.4-dev.6 — последняя сборка, опубликованная в GitHub
+
+- Исправлена синтаксическая ошибка NemesisService, которая останавливала загрузку CombatService и Bootstrap.
+- Подтверждено наличие NemezidaRemotes в серверном пути и ожидающих их клиентских скриптов.
+- Place содержит 7 ModuleScript, 1 Script и 4 LocalScript.
+- Это статическая сверка XML/исходников; запуск в Roblox Studio и Play/multiplayer не выполнялся.
+
 ## v0.4-dev.4 — безопасный старт и первая автоматическая популяция
 1. Bootstrap отключает Players.CharacterAutoLoads перед инициализацией.
 2. HubGenerator сначала создаёт anchored/collidable AshenGround, затем широкую SpawnPlaza.
