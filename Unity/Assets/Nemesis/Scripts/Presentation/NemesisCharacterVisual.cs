@@ -80,9 +80,9 @@ namespace Nemesis.Presentation
                 return;
             }
 
-            bool hasHelmet = AttachImported(catalog.FindPrefab("helmet"), "Imported_Helmet",
+            AttachImported(catalog.FindPrefab("helmet"), "Imported_Helmet",
                 new Vector3(0f, 2.05f, 0f), Vector3.zero, .52f);
-            bool hasArmor = AttachImported(catalog.FindPrefab("chest_armor"), "Imported_ChestArmor",
+            AttachImported(catalog.FindPrefab("chest_armor"), "Imported_ChestArmor",
                 new Vector3(0f, 1.18f, -.015f), Vector3.zero, .82f);
 
             GameObject weaponPrefab = catalog.FindPrefab(style == NemesisCharacterStyle.Boss ? "greatsword" : "sword");
@@ -91,7 +91,7 @@ namespace Nemesis.Presentation
                 new Vector3(.68f, 1.02f, -.06f), new Vector3(0f, 0f, -28f),
                 style == NemesisCharacterStyle.Boss ? 1.55f : 1.18f);
 
-            bool hasShield = style == NemesisCharacterStyle.Player &&
+            if (style == NemesisCharacterStyle.Player)
                 AttachImported(catalog.FindPrefab("shield"), "Imported_Shield",
                     new Vector3(-.62f, 1.05f, -.02f), new Vector3(0f, 0f, 90f), .78f);
 
