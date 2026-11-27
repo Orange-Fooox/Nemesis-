@@ -2,26 +2,25 @@
 
 **Nemesis: Seal of the Abyss** — мрачная изометрическая action-RPG для Roblox.
 
-> Текущий срез исходников и Place-файл: v0.4-dev.6. Нажатие Play автоматически генерирует мир, затем создаёт персонажа и запускает население/интерфейс. Статическая структура проверена; реальный Roblox Studio Play-тест ещё требуется.
-
-## Концепция
-Игрок — Носитель Печати, исследующий разрушенный мир, сражающийся с существами Бездны и раскрывающий происхождение катастрофы. Визуальное направление: тёмная изометрическая RPG, чёрный металл, пепел, руины, золотые элементы интерфейса и фиолетовая энергия.
+> Текущий срез исходников: v0.4-dev.6. Статический статус описан в технической документации; Play-тест в Roblox Studio ещё требуется.
 
 ## Текущий технический статус
-v0.4-dev.6 содержит автоматический сценарий запуска по Play и обработку уже появившегося до генерации персонажа. Включает серверную боевую систему, нейтральный AI, детерминированную генерацию хаба, безопасный порядок появления игрока, автоматическое процедурное население из шести врагов, изометрическую камеру, способности, спринт и HUD.
+v0.4-dev.6 содержит автоматический сценарий запуска по Play, серверную боевую систему, нейтральный AI, генерацию хаба, шесть тестовых врагов, изометрическую камеру, способности, спринт и HUD.
 
-Подробности: [технический статус](docs/TECHNICAL_STATUS.md), [статическая проверка v0.4-dev.6](Tests/STATIC_REVIEW_v0_4-dev5.txt), [история изменений](CHANGELOG.md).
+В файле NEMEZIDA_Forest_Grove_Placed_v2(1).rbxlx подтверждена папка Workspace/Meshes с 542 PolygonDungeon MeshPart и одним Polygon-модулем. Это библиотека ассетов внутри Place, а не подтверждение готового и протестированного подземелья.
 
-**Граница проверки:** Roblox Studio, Luau compiler, Rojo build и Play session в этой среде не запускались. Не считать статическую проверку подтверждением runtime-работоспособности.
+Подробности: [технический статус](docs/TECHNICAL_STATUS.md), [аудит Polygon Pack](docs/POLYGON_PACK_AUDIT.md), [план переноса на Unity](docs/UNITY_PORT_PLAN.md), [история изменений](CHANGELOG.md).
+
+**Граница проверки:** Roblox Studio, Luau compiler, Rojo build и Play session в этой среде не запускались.
 
 ## Файл Roblox Studio
-Открой или скачай [NEMEZIDA_Studio_v0_4_dev6.rbxlx](Roblox/Releases/NEMEZIDA_Studio_v0_4_dev6.rbxlx), затем в Studio выбери File → Open from File. В нём находится серверная и клиентская логика v0.4-dev.6.
+Текущий Place с импортированными Polygon-ассетами находится в библиотеке ChatGPT как NEMEZIDA_Forest_Grove_Placed_v2(1).rbxlx. Он ещё не опубликован в Roblox/Releases репозитория. Старые dev-файлы находятся в [Roblox/Releases](Roblox/Releases/).
 
 ## Быстрый старт
-1. Скачать .rbxlx из Roblox/Releases/.
-2. Открыть через File → Open from File в Roblox Studio.
-3. Просто нажать Play (F5). Никакие команды, вставки кода или действия в Command Bar для старта не нужны.
-4. Убедиться, что игрок стоит на площади, в Explorer есть Workspace/NemezidaGeneratedHub, а в мире появились нейтральные враги.
+1. Открыть актуальный .rbxlx через File → Open from File в Roblox Studio.
+2. Нажать Play (F5).
+3. Проверить появление игрока, HUD, хаб и коллизии.
+4. Отдельно проверить Workspace/Meshes: наличие ассетов не означает, что dungeon layout уже собран.
 
 Управление: WASD, ЛКМ/F, Z/X/C/V/B, Shift.
 
@@ -36,13 +35,15 @@ Luau-код находится в [Roblox/Source](Roblox/Source/README.md). Дл
 - [Система Немезиды](docs/NEMESIS_SYSTEM.md)
 - [Процедурная генерация](docs/PROCEDURAL_GENERATION.md)
 - [Мир и подземелья](docs/WORLD_AND_DUNGEONS.md)
+- [Аудит Polygon Pack](docs/POLYGON_PACK_AUDIT.md)
+- [План переноса на Unity](docs/UNITY_PORT_PLAN.md)
 - [Вехи разработки](docs/MILESTONES.md)
 - [Технический статус](docs/TECHNICAL_STATUS.md)
 - [Приёмочные тесты](Tests/ACCEPTANCE_TESTS_v0_4.md)
 
 ## Структура
-- Roblox/Releases/ — Place-файлы Studio и заметки к ним.
+- Roblox/Releases/ — Place-файлы Studio.
 - Roblox/Source/ — Luau-исходники.
 - Roblox/Assets/ — ресурсы и концепт-арт.
 - docs/ — документация.
-- Tests/ — статические и приёмочные проверки.
+- Tests/ — проверки.
