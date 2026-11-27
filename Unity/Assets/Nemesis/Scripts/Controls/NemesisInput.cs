@@ -68,24 +68,32 @@ namespace Nemesis.Controls
 #if ENABLE_INPUT_SYSTEM
             Keyboard keyboard = Keyboard.current;
             Mouse mouse = Mouse.current;
+            Gamepad gamepad = Gamepad.current;
 
             switch (action)
             {
                 case NemesisInputAction.Attack:
                     return (keyboard != null && keyboard.fKey.wasPressedThisFrame)
-                        || (mouse != null && mouse.leftButton.wasPressedThisFrame);
+                        || (mouse != null && mouse.leftButton.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.rightTrigger.wasPressedThisFrame);
                 case NemesisInputAction.Dodge:
-                    return keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
+                    return (keyboard != null && keyboard.spaceKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.buttonSouth.wasPressedThisFrame);
                 case NemesisInputAction.SealStrike:
-                    return keyboard != null && keyboard.zKey.wasPressedThisFrame;
+                    return (keyboard != null && keyboard.zKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.buttonWest.wasPressedThisFrame);
                 case NemesisInputAction.ShadowDash:
-                    return keyboard != null && keyboard.xKey.wasPressedThisFrame;
+                    return (keyboard != null && keyboard.xKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.buttonNorth.wasPressedThisFrame);
                 case NemesisInputAction.EarthRend:
-                    return keyboard != null && keyboard.cKey.wasPressedThisFrame;
+                    return (keyboard != null && keyboard.cKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.leftShoulder.wasPressedThisFrame);
                 case NemesisInputAction.AbyssRelease:
-                    return keyboard != null && keyboard.vKey.wasPressedThisFrame;
+                    return (keyboard != null && keyboard.vKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.rightShoulder.wasPressedThisFrame);
                 case NemesisInputAction.Barrier:
-                    return keyboard != null && keyboard.bKey.wasPressedThisFrame;
+                    return (keyboard != null && keyboard.bKey.wasPressedThisFrame)
+                        || (gamepad != null && gamepad.buttonEast.wasPressedThisFrame);
                 default:
                     return false;
             }
