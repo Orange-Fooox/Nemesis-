@@ -1,12 +1,12 @@
 # Roblox Studio releases
 
-## Текущая dev-сборка: v0.4-dev.5
+## Текущая dev-сборка: v0.4-dev.6
 
-[NEMEZIDA_Studio_v0_4_dev5.rbxlx](NEMEZIDA_Studio_v0_4_dev5.rbxlx)
+[NEMEZIDA_Studio_v0_4_dev6.rbxlx](NEMEZIDA_Studio_v0_4_dev6.rbxlx)
 
 **Запуск без команд:** скачай Place-файл, открой в Roblox Studio и нажми Play (F5). Серверный Bootstrap автоматически создаёт хаб, безопасную точку появления и противников, после чего загружает персонажа. Command Bar не нужен.
 
-В v0.4-dev.5 дополнительно обработан случай, когда Player/Character уже появился до того, как Bootstrap закончил инициализацию: существующий персонаж также переносится на безопасную точку после готовности мира.
+В v0.4-dev.6 исправлена синтаксическая ошибка NemesisService, из-за которой падала загрузка CombatService и Bootstrap. После этого серверная инициализация создаёт NemezidaRemotes, которые ожидают клиентские скрипты.
 
 Содержит 12 объектов скриптов: 7 ModuleScript, 1 Script и 4 LocalScript. Проверка ограничена статической сверкой XML и исходников. Roblox Studio, Luau compiler, Rojo CLI и Play session не запускались. Это dev-прототип, runtime-поведение нужно подтвердить в Studio.
 
