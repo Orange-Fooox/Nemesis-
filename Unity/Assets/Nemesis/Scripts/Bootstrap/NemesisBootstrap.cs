@@ -68,6 +68,8 @@ namespace Nemesis.Bootstrap
             if(prefab!=null)
             {
                 instance=Instantiate(prefab,groundPosition,Quaternion.identity);
+                MonoBehaviour[] embeddedScripts=instance.GetComponentsInChildren<MonoBehaviour>(true);
+                foreach(MonoBehaviour script in embeddedScripts)script.enabled=false;
                 Renderer[] renderers=instance.GetComponentsInChildren<Renderer>(true);
                 if(renderers.Length>0)
                 {
