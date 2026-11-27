@@ -7,6 +7,7 @@ using Nemesis.Presentation;
 using Nemesis.UI;
 using Nemesis.Content;
 using Nemesis.World;
+using Nemesis.Interaction;
 
 namespace Nemesis.Bootstrap
 {
@@ -60,6 +61,7 @@ namespace Nemesis.Bootstrap
             player.AddComponent<PlayerResources>();
             player.AddComponent<TopDownPlayerController>();
             player.AddComponent<PlayerAbilityController>();
+            player.AddComponent<PlayerInteractionController>();
             player.AddComponent<NemesisHUD>();
 
             NemesisCharacterVisual.Create("Player_Armored", NemesisCharacterStyle.Player)
@@ -116,6 +118,11 @@ namespace Nemesis.Bootstrap
 
             NemesisCharacterVisual.Create("Mira_Visual", NemesisCharacterStyle.Merchant)
                 .transform.SetParent(npc.transform, false);
+
+            npc.AddComponent<NemesisWorldInteractable>().Configure(
+                "Мира, торговка",
+                "E — поговорить",
+                "Мира: Пепел забирает многое. Но пока у тебя есть Эссенция, дорога ещё не закончена. Торговля и экипировка будут доступны позже.");
         }
 
         private void CreateCamera(Transform target)
