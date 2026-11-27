@@ -4,6 +4,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local CollectionService = game:GetService("CollectionService")
+local TweenService = game:GetService("TweenService")
+local Debris = game:GetService("Debris")
 local Config = require(ReplicatedStorage:WaitForChild("Nemezida"):WaitForChild("Shared"):WaitForChild("NemezidaConfig"))
 local NemesisService = require(ServerScriptService:WaitForChild("Services"):WaitForChild("NemesisService"))
 local CombatService = {}
@@ -56,6 +58,23 @@ local function applyDamage(player: Player, enemy: Model, multiplier: number, max
  enemy:SetAttribute("LastDamagedByUserId",player.UserId)
  enemy:SetAttribute("ProvokedUntil",now+Config.Combat.EnemyAlertDuration)
  humanoid:TakeDamage(damage)
+ local targetRoot=enemy:FindFirstChild("HumanoidRootPart") or enemy.PrimaryPart
+ if targetRoot then
+  local flash=Instance.new("Part")
+  flash.Name="NemezidaHitFlash"; flash.Shape=Enum.PartType.Ball; flash.Size=Vector3.new(0.8,0.8,0.8)
+  flash.CFrame=targetRoot.CFrame; flash.Anchored=true; flash.CanCollide=false; flash.CanQuery=false
+  flash.Material=Enum.Material.Neon; flash.Color=Color3.fromRGB(174,76,91); flash.Transparency=0.18; flash.Parent=workspace
+  TweenService:Create(flash,TweenInfo.new(0.22,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Size=Vector3.new(3.2,3.2,3.2),Transparency=1}):Play()
+  Debris:AddItem(flash,0.28)
+  local billboard=Instance.new("BillboardGui"); billboard.Name="DamageNumber"; billboard.Size=UDim2.fromOffset(90,34)
+  billboard.StudsOffset=Vector3.new(0,3.2,0); billboard.AlwaysOnTop=true; billboard.Adornee=targetRoot; billboard.Parent=enemy
+  local label=Instance.new("TextLabel"); label.Size=UDim2.fromScale(1,1); label.BackgroundTransparency=1
+  label.Font=Enum.Font.GothamBold; label.Text=tostring(math.floor(damage+0.5)); label.TextColor3=Color3.fromRGB(255,205,157)
+  label.TextStrokeTransparency=0.25; label.TextScaled=true; label.Parent=billboard
+  TweenService:Create(billboard,TweenInfo.new(0.55,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{StudsOffset=Vector3.new(0,5.4,0)}):Play()
+  TweenService:Create(label,TweenInfo.new(0.55),{TextTransparency=1,TextStrokeTransparency=1}):Play()
+  Debris:AddItem(billboard,0.6)
+ end
  return true
 end
 

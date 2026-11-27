@@ -133,6 +133,17 @@ function HubGenerator.Generate(seed: number?)
   makeBuilding(rng, root, "RuinedBuilding_" .. index, x, z)
  end
 
+ -- Warm cursed lanterns break up the grey stone palette and make routes readable.
+ local torchPositions = {Vector3.new(-34,0,34), Vector3.new(34,0,34), Vector3.new(-34,0,-34), Vector3.new(34,0,-34), Vector3.new(-12,0,125), Vector3.new(12,0,125)}
+ for index, pos in torchPositions do
+  local base = makePart(root, "AshenLanternBase", Vector3.new(3,1,3), CFrame.new(pos.X,0.5,pos.Z), Color3.fromRGB(37,32,39), Enum.Material.Basalt)
+  local stem = makePart(root, "AshenLanternStem", Vector3.new(1,7,1), CFrame.new(pos.X,4,pos.Z), Color3.fromRGB(52,43,39), Enum.Material.Metal)
+  local flame = makePart(root, "AshenLanternFlame", Vector3.new(1.4,1.8,1.4), CFrame.new(pos.X,7.8,pos.Z), Color3.fromRGB(153,83,49), Enum.Material.Neon)
+  flame.Shape = Enum.PartType.Ball; flame.CanCollide = false
+  local fire = Instance.new("Fire"); fire.Size = 3.5; fire.Heat = 4; fire.Color = Color3.fromRGB(207,112,58); fire.SecondaryColor = Color3.fromRGB(92,43,123); fire.Parent = flame
+  local light = Instance.new("PointLight"); light.Color = Color3.fromRGB(224,137,78); light.Range = 19; light.Brightness = 1.35; light.Shadows = true; light.Parent = flame
+ end
+
  -- Deterministic rubble outside the main roads and away from the player spawn.
  for index = 1, 90 do
   local x = rng:NextInteger(-195, 195)
