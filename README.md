@@ -76,6 +76,8 @@
 - [Аудит Polygon Dungeon Pack](docs/POLYGON_PACK_AUDIT.md)
 - [План переноса на Unity](docs/UNITY_PORT_PLAN.md)
 - [История изменений](CHANGELOG.md)
+- [DEVLOG v0.4.1 — бой, первое подземелье и NPC](docs/DEVLOG_v0_4_1.md)
+- [DEVLOG v0.4.2 — интеграция Forest Grove](docs/DEVLOG_v0_4_2.md)
 
 ## Запуск
 
