@@ -20,12 +20,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Download Kenney Mini Dungeon 2.0 (CC0)
+        shell: bash
+        run: |
+          set -euo pipefail
+          asset_dir="Unity/Assets/NemesisContent/Imported/KenneyMiniDungeon"
+          archive="$RUNNER_TEMP/kenney_mini-dungeon.zip"
+          mkdir -p "$asset_dir"
+          curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
+            "https://kenney.nl/media/pages/assets/mini-dungeon/6cd72dc849-1785314274/kenney_mini-dungeon.zip" \
+            --output "$archive"
+          unzip -q "$archive" -d "$asset_dir"
+          model_count="$(find "$asset_dir" -type f \\( -iname '*.fbx' -o -iname '*.obj' -o -iname '*.gltf' -o -iname '*.glb' \\) | wc -l | tr -d ' ')"
+          if [ "$model_count" -lt 1 ]; then
+            echo "::error::Kenney archive contained no supported 3D model files."
+            find "$asset_dir" -maxdepth 3 -type f | head -100
+            exit 1
+          fi
+          cat > "$asset_dir/ASSET_SOURCE.md" <<'EOF'
+          # Kenney Mini Dungeon 2.0
+          
+          - Creator: Kenney
+          - License: Creative Commons CC0 1.0 Universal
+          - Official source: https://kenney.nl/assets/mini-dungeon
+          - Official download: https://kenney.nl/media/pages/assets/mini-dungeon/6cd72dc849-1785314274/kenney_mini-dungeon.zip
+          
+          The creator identifies this pack as CC0. It may be used, modified and redistributed, including in commercial projects. Attribution is not required; optional credit: "Mini Dungeon by Kenney".
+          The source archive is fetched during packaging and extracted into this folder.
+          EOF
+          echo "Imported Kenney Mini Dungeon: $model_count 3D model files."
+
       - name: Validate Unity project structure and create ZIP
         shell: bash
         run: |
+          set -euo pipefail
           test -f Unity/ProjectSettings/ProjectVersion.txt
           test -f Unity/Packages/manifest.json
           test -f Unity/Assets/Editor/NemesisProjectBootstrap.cs
+          test -f Unity/Assets/NemesisContent/Imported/KenneyMiniDungeon/ASSET_SOURCE.md
           mkdir -p dist
           zip -qr dist/Nemesis-Unity-Project.zip Unity README.md CHANGELOG.md docs .gitignore -x "Unity/Library/*" "Unity/Temp/*" "Unity/Obj/*" "Unity/Build/*" "Unity/Logs/*" "Unity/UserSettings/*"
           sha256sum dist/Nemesis-Unity-Project.zip > dist/SHA256SUMS.txt
