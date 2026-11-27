@@ -13,6 +13,34 @@ permissions:
   contents: read
 
 jobs:
+  source-archive:
+    name: Package Unity project source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Unity project structure and create ZIP
+        shell: bash
+        run: |
+          test -f Unity/ProjectSettings/ProjectVersion.txt
+          test -f Unity/Packages/manifest.json
+          test -f Unity/Assets/Editor/NemesisProjectBootstrap.cs
+          mkdir -p dist
+          zip -qr dist/Nemesis-Unity-Project.zip Unity README.md CHANGELOG.md docs .gitignore \\
+            -x "Unity/Library/*" "Unity/Temp/*" "Unity/Obj/*" "Unity/Build/*" "Unity/Logs/*" "Unity/UserSettings/*"
+          sha256sum dist/Nemesis-Unity-Project.zip > dist/SHA256SUMS.txt
+
+      - name: Upload Unity source project
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nemesis-Unity-Project
+          path: |
+            dist/Nemesis-Unity-Project.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
+
   build-windows:
     name: Build Nemesis for Windows x64
     runs-on: ubuntu-latest
