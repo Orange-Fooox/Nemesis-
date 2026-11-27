@@ -1,21 +1,10 @@
-# Roblox Studio assets
+# Roblox project
 
-Эта папка предназначена для исходных файлов Roblox Studio и связанных ресурсов.
+Текущая сборка: v0.4-dev.4.
 
-Рекомендуемая структура:
+- Готовый файл Studio: Releases/NEMEZIDA_Studio_v0_4_dev4.rbxlx.
+- Luau-исходники: Source/.
+- Инструкция по открытию и тестированию: BUILD_AND_TEST.md.
+- Приёмочные тесты: ../Tests/ACCEPTANCE_TESTS_v0_4.md.
 
-```
-Roblox/
-  releases/
-    NEMEZIDA_Roblox_Prototype_v0_1.rbxlx
-    NEMEZIDA_Roblox_Prototype_v0_2.rbxlx
-  source/
-    StarterPlayer/
-    StarterGui/
-    ServerScriptService/
-  assets/
-```
-
-Файлы `.rbxlx` и архивы v0.1/v0.2 пока не загружены в репозиторий. Добавлять их следует только после проверки точных файлов. Для больших бинарных артефактов рекомендуется Git LFS либо GitHub Releases.
-
-Не храните в репозитории токены, пароли, cookie или приватные ключи.
+Открой Place-файл через Roblox Studio → File → Open from File. До проверки Play в Studio статус остаётся dev / статически проверено.
