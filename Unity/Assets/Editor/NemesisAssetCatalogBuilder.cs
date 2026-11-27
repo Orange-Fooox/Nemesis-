@@ -90,7 +90,7 @@ namespace Nemesis.EditorTools
                 foreach (Rule rule in Rules)
                 {
                     int score = Score(searchable, fileName.ToLowerInvariant(), rule.Keywords);
-                    if (path.StartsWith(PreferredPackRoot, StringComparison.OrdinalIgnoreCase))
+                    if (score > 0 && path.StartsWith(PreferredPackRoot, StringComparison.OrdinalIgnoreCase))
                         score += 30;
                     if (score <= 0) continue;
 
