@@ -6,6 +6,14 @@ local HubGenerator = {}
 local SIZE = 420
 local HALF = SIZE / 2
 local SPAWN_POSITION = Vector3.new(0, 0, 165)
+local ENEMY_SPAWN_POSITIONS = {
+ Vector3.new(-175, 0, -175),
+ Vector3.new(175, 0, -175),
+ Vector3.new(-175, 0, 175),
+ Vector3.new(175, 0, 175),
+ Vector3.new(0, 0, -185),
+ Vector3.new(185, 0, 0),
+}
 
 local function makePart(parent: Instance, name: string, size: Vector3, cf: CFrame, color: Color3, material: Enum.Material): Part
  local p = Instance.new("Part")
@@ -37,16 +45,8 @@ local function makeEnemySpawnPoints(parent: Instance, rng: Random)
  local folder = Instance.new("Folder")
  folder.Name = "EnemySpawnPoints"
  folder.Parent = parent
- local points = {
-  Vector3.new(-175, 0, -175),
-  Vector3.new(175, 0, -175),
-  Vector3.new(-175, 0, 175),
-  Vector3.new(175, 0, 175),
-  Vector3.new(0, 0, -185),
-  Vector3.new(185, 0, 0),
- }
  -- Seed-based small offsets keep encounters reproducible without overlapping buildings.
- for index, point in points do
+ for index, point in ENEMY_SPAWN_POSITIONS do
   local marker = Instance.new("Part")
   marker.Name = "EnemySpawn_" .. index
   marker.Size = Vector3.new(2, 0.2, 2)
@@ -137,9 +137,17 @@ function HubGenerator.Generate(seed: number?)
  for index = 1, 90 do
   local x = rng:NextInteger(-195, 195)
   local z = rng:NextInteger(-195, 195)
-  local awayFromSpawn = (Vector3.new(x, 0, z) - SPAWN_POSITION).Magnitude > 34
+  local candidate = Vector3.new(x, 0, z)
+  local awayFromSpawn = (candidate - SPAWN_POSITION).Magnitude > 34
+  local clearOfEnemySpawns = true
+  for _, enemySpawn in ENEMY_SPAWN_POSITIONS do
+   if (candidate - enemySpawn).Magnitude < 20 then
+    clearOfEnemySpawns = false
+    break
+   end
+  end
   local offRoad = math.abs(x) > 13 and math.abs(z) > 13
-  if awayFromSpawn and offRoad then
+  if awayFromSpawn and clearOfEnemySpawns and offRoad then
    local size = rng:NextInteger(2, 6)
    local rubble = makePart(root, "AshenRubble", Vector3.new(size, size, size),
     CFrame.new(x, size/2, z) * CFrame.Angles(0, rng:NextNumber(0, math.pi), rng:NextNumber(-0.2, 0.2)),
