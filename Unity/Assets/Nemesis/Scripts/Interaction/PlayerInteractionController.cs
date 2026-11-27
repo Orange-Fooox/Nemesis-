@@ -65,7 +65,7 @@ namespace Nemesis.Interaction
                 const float width = 360f;
                 GUI.Box(
                     new Rect((Screen.width - width) * .5f, Screen.height - 78f, width, 38f),
-                    currentTarget.DisplayName + "   [E] " + currentTarget.Prompt,
+                    currentTarget.DisplayName + "   [E / D-pad ↓] " + currentTarget.Prompt,
                     promptStyle);
             }
 
