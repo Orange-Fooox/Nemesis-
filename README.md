@@ -1,3 +1,4 @@
+<img width="1920" height="1080" alt="nemesis-cover-fullhd" src="https://github.com/user-attachments/assets/157f26d0-338a-432b-8ba7-23c3a744b62e" />
 # NEMESIS: Печать Бездны
 
 Мрачная 2D action-RPG на Unity 6 с видом сверху и изометрической раскладкой.
